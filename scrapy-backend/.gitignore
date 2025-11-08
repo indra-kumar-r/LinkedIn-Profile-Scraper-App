@@ -1,0 +1,90 @@
+# -------------------------------
+# Go Build Artifacts
+# -------------------------------
+# Compiled binary files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go coverage and profiling files
+*.cover
+*.cov
+*.prof
+*.test
+*.pprof
+
+# Vendor directory (if you use go modules, this is optional)
+vendor/
+
+# -------------------------------
+# Environment & Secrets
+# -------------------------------
+# Env files
+.env
+.env.*
+
+# -------------------------------
+# Logs and Runtime Files
+# -------------------------------
+*.log
+logs/
+tmp/
+temp/
+*.pid
+
+# -------------------------------
+# OS and Editor Specific
+# -------------------------------
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# JetBrains / GoLand
+.idea/
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# -------------------------------
+# Dependency / Build Tools
+# -------------------------------
+# Go workspace file (optional, if generated)
+go.work
+go.work.sum
+
+# -------------------------------
+# Docker & Containers
+# -------------------------------
+# Ignore local Docker files
+docker-compose.override.yml
+.docker/
+.dockerignore
+
+# -------------------------------
+# Cache / Temporary Files
+# -------------------------------
+.cache/
+dist/
+build/
+bin/
+coverage/
+node_modules/
+
+# -------------------------------
+# Other project artifacts
+# -------------------------------
+# Ignore any compiled or temporary local files
+*.bak
+*.tmp
