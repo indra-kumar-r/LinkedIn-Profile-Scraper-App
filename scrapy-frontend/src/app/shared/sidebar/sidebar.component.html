@@ -13,18 +13,17 @@
         (click)="selectTab(tab.path)"
       >
         <i [class]="tab.icon"></i>
+        <div class="tooltip">{{ tab.name }}</div>
       </div>
     </div>
   </div>
 
   <div class="footer-section">
-    <div
-      class="logout-btn text-secondary fw-bold text-uppercase"
-      (click)="logout()"
-    >
-      <i class="bi bi-arrow-right-circle fs-4"></i>
-
-      Logout
+    <div class="tabs">
+      <div class="tab fs-6 text-secondary fw-bolder" (click)="logout()">
+        <i class="bi bi-arrow-right-circle fs-3"></i>
+        <div class="tooltip">Logout</div>
+      </div>
     </div>
   </div>
 </div>
