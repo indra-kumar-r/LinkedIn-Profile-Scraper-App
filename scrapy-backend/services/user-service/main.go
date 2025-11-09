@@ -17,6 +17,7 @@ func main() {
 	db := client.Database(cfg.DBName)
 
 	app := fiber.New()
+	app.Use(middleware.CorsMiddleware())
 	app.Use(middleware.CamelCaseMiddleware)
 
 	userRepo := repository.NewUserRepository(db)
