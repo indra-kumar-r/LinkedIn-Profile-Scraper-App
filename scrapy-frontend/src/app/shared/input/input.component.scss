@@ -1,0 +1,43 @@
+.input-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: "Manrope", "Roboto";
+
+  label {
+    font-size: small;
+    font-weight: 600;
+    color: #000;
+
+    span {
+      color: red;
+    }
+  }
+
+  input {
+    display: flex;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(211, 211, 211, 0.5);
+    outline: none;
+    color: #000;
+    font-size: small;
+    transition: all 0.3s ease-in-out;
+
+    &:focus {
+      border: 1px solid rgba(211, 211, 211);
+      box-shadow: 0 0 12px rgba(211, 211, 211, 0.5);
+    }
+
+    &::placeholder {
+      color: lightgray;
+    }
+
+    &[type="number"]::-webkit-inner-spin-button,
+    &[type="number"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
