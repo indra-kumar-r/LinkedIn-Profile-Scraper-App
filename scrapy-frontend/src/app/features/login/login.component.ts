@@ -97,6 +97,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
+  selectUser(userId: string): void {
+    this.selectedUser = userId;
+    this.login();
+  }
+
   createUser(): void {
     if (this.userForm.invalid) return;
 
