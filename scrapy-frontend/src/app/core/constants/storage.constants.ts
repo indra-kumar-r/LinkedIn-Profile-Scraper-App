@@ -1,5 +1,7 @@
-export const LocalStorageKeys = {};
+export const LocalStorageKeys = {
+  AUTH: 'auth',
+};
 
 export const SessionStorageKeys = {
-  AUTH: 'auth',
+  REDIRECT_AFTER_LOGIN: 'redirectAfterLogin',
 };
