@@ -4,4 +4,8 @@
   box-sizing: border-box;
   user-select: none;
   font-family: "Manrope", "Roboto";
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

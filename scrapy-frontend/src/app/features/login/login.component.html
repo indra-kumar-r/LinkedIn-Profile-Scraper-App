@@ -7,9 +7,67 @@
     </div>
   </div>
 
-  <div class="users-container"></div>
+  <ng-container *ngIf="users.length > 0">
+    <div class="users-container">
+      <div class="info text-secondary fw-bold">
+        <span class="text-dark">
+          {{ users.length }}
+        </span>
 
-  <div class="divider"></div>
+        users found, select user to continue
+      </div>
+
+      <div class="users">
+        <div
+          class="user"
+          *ngFor="let user of users"
+          (click)="selectUser(user.uuid)"
+        >
+          <div class="user-header-section">
+            <div class="user-name-section fs-3 text-dark fw-bold">
+              {{ user.name | titlecase }}
+            </div>
+          </div>
+
+          <div class="user-body-section">
+            <div class="content-section serpapi-details-section">
+              <div class="details-section text-secondary">
+                Email:
+                <span class="fw-bold text-dark">
+                  {{ user.email }}
+                </span>
+              </div>
+
+              <div class="details-section text-secondary">
+                Plan:
+                <span class="fw-bold text-dark">{{ user.planName }}</span>
+              </div>
+
+              <div class="details-section text-secondary">
+                Status:
+                <span class="fw-bold text-dark">
+                  {{ user.accountStatus }}
+                </span>
+              </div>
+
+              <div class="details-section text-secondary">
+                Searches left:
+                <span class="fw-bold text-dark">
+                  {{ user.totalSearchesLeft }}
+                </span>
+              </div>
+            </div>
+
+            <div class="content-section text-secondary fw-bold">
+              Created on: <span>{{ user.createdAt | date }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+  </ng-container>
 
   <div class="form-container">
     <form [formGroup]="userForm">
