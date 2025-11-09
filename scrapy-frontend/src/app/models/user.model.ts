@@ -2,6 +2,12 @@ export interface Users {
   message: string;
   users: User[];
 }
+
+export interface UserRegisterResponse {
+  message: string;
+  user: User;
+}
+
 export interface User {
   id: string;
   uuid: string;

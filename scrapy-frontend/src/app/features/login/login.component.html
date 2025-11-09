@@ -1,1 +1,57 @@
-<p>login works!</p>
+<div class="login-wrapper">
+  <div class="logo-container">
+    <img src="fox_logo.png" alt="Logo" />
+
+    <div class="logo-text fs-3 fw-bolder text-secondary text-uppercase">
+      Scrapy
+    </div>
+  </div>
+
+  <div class="users-container"></div>
+
+  <div class="divider"></div>
+
+  <div class="form-container">
+    <form [formGroup]="userForm">
+      <div class="text-secondary fw-bold fs-6 form-header">
+        New user? Sign in
+      </div>
+
+      <div class="input-section">
+        <app-input
+          label="User Name"
+          placeholder="Enter user name"
+          type="text"
+          [formControl]="getControl('name')"
+        ></app-input>
+
+        <app-input
+          label="User Email"
+          placeholder="Enter user email"
+          type="email"
+          [formControl]="getControl('email')"
+        ></app-input>
+
+        <app-input
+          label="Serp API Key"
+          placeholder="Enter serp api key"
+          type="text"
+          [formControl]="getControl('serpapiKey')"
+        ></app-input>
+
+        <div class="verification-section"></div>
+      </div>
+
+      <div class="btns">
+        <button
+          type="button"
+          class="btn btn-success"
+          [disabled]="userForm.invalid"
+          (click)="createUser()"
+        >
+          Sign in
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

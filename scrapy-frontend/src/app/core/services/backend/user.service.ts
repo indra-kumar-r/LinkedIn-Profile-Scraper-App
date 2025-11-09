@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from '../http/http.service';
 import { environment } from '../../../../environments/environments';
 import { Observable } from 'rxjs';
-import { Users, User } from '../../../models/user.model';
+import { Users, User, UserRegisterResponse } from '../../../models/user.model';
 import { UsersApis } from '../../constants/api-routes-constants';
 
 @Injectable({
@@ -17,8 +17,12 @@ export class UserService {
     return this.http.get<Users>(UsersApis.USERS, this.apiUrl);
   }
 
-  create(user: User): Observable<User> {
-    return this.http.post<User>(UsersApis.USERS, user, this.apiUrl);
+  create(user: Partial<User>): Observable<UserRegisterResponse> {
+    return this.http.post<UserRegisterResponse>(
+      UsersApis.USERS,
+      user,
+      this.apiUrl
+    );
   }
 
   get(userId: string): Observable<User> {
