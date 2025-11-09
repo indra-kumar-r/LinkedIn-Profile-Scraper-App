@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       userId: this.selectedUser,
     };
     this.authService.login(user);
-    this.router.navigate(['/home']);
+    this.router.navigate(['/search']);
   }
 
   fetchUsers(): void {
