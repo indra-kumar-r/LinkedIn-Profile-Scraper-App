@@ -1,0 +1,17 @@
+<div class="input-wrapper">
+  <ng-container *ngIf="label">
+    <label>{{ label }} <span>*</span></label>
+  </ng-container>
+
+  <input
+    [type]="type"
+    [placeholder]="placeholder"
+    [readonly]="readonly"
+    [value]="value"
+    (input)="onInput($event)"
+  />
+
+  <ng-container *ngIf="errorMsg">
+    <div class="input-error">{{ errorMsg }}</div>
+  </ng-container>
+</div>
