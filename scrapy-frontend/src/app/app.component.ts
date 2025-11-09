@@ -8,6 +8,4 @@ import { ToasterComponent } from './shared/toaster/toaster.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  title = 'scrapy-frontend';
-}
+export class AppComponent {}
