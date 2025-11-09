@@ -8,7 +8,7 @@ export const loginGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (authService.isLoggedIn()) {
-    return router.parseUrl('/home');
+    return router.parseUrl('/search');
   }
 
   authService.removeUserInfo();

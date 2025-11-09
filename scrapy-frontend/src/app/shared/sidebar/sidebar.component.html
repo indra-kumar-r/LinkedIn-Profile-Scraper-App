@@ -1,1 +1,30 @@
-<p>sidebar works!</p>
+<div class="sidebar-wrapper">
+  <div class="header-section">
+    <img src="fox_logo.png" alt="Logo" />
+
+    <div class="logo-text">Scrapy</div>
+  </div>
+
+  <div class="body-section">
+    <div class="tabs">
+      <div
+        class="tab fs-6 text-secondary fw-bolder"
+        *ngFor="let tab of tabs"
+        (click)="selectTab(tab.path)"
+      >
+        <i [class]="tab.icon"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-section">
+    <div
+      class="logout-btn text-secondary fw-bold text-uppercase"
+      (click)="logout()"
+    >
+      <i class="bi bi-arrow-right-circle fs-4"></i>
+
+      Logout
+    </div>
+  </div>
+</div>

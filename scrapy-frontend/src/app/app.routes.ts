@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/login/login.component';
-import { HomeComponent } from './features/home/home.component';
 import { UserComponent } from './features/user/user.component';
 import { HistoryComponent } from './features/history/history.component';
 import { SearchQueriesComponent } from './features/history/search-queries/search-queries.component';
@@ -12,7 +11,7 @@ import { authGuard, loginGuard } from './core/services/auth';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/search',
     pathMatch: 'full',
   },
   {
@@ -21,9 +20,18 @@ export const routes: Routes = [
     canActivate: [loginGuard],
   },
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'search',
     canActivate: [authGuard],
+    children: [
+      {
+        path: '',
+        component: SearchComponent,
+      },
+      {
+        path: ':searchId',
+        component: SearchComponent,
+      },
+    ],
   },
   {
     path: 'user',
@@ -47,20 +55,6 @@ export const routes: Routes = [
       {
         path: 'search-queries/:searchId',
         component: SearchQueryComponent,
-      },
-    ],
-  },
-  {
-    path: 'search',
-    canActivate: [authGuard],
-    children: [
-      {
-        path: '',
-        component: SearchComponent,
-      },
-      {
-        path: ':searchId',
-        component: SearchComponent,
       },
     ],
   },
