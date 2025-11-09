@@ -13,7 +13,7 @@ import { UserService } from '../../core/services/backend';
 import { ToasterService } from '../../core/services/toaster/toaster.service';
 import { catchError, finalize, of, Subject, takeUntil, tap } from 'rxjs';
 import { Auth } from '../../models/shared.model';
-import { User, UserRegisterResponse, Users } from '../../models/user.model';
+import { User, UserResponse, Users } from '../../models/user.model';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../../shared/input/input.component';
 
@@ -109,7 +109,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userService
       .create(this.userForm.value)
       .pipe(
-        tap((response: UserRegisterResponse) => {
+        tap((response: UserResponse) => {
           const user = response?.user;
 
           if (user && user.uuid) {

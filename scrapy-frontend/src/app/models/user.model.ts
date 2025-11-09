@@ -3,7 +3,7 @@ export interface Users {
   users: User[];
 }
 
-export interface UserRegisterResponse {
+export interface UserResponse {
   message: string;
   user: User;
 }
@@ -20,6 +20,7 @@ export interface User {
   remainingCredits: number;
   searchesPerMonth: number;
   totalSearchesLeft: number;
+  thisMonthUsage: number;
   createdAt: string;
   updatedAt: string;
 }
