@@ -3,5 +3,65 @@
     <app-sidebar></app-sidebar>
   </div>
 
-  <div class="user-container"></div>
+  <div class="user-container">
+    <ng-container *ngIf="!loadingUser; else loaderContainer">
+      <div class="basic-details-section">
+        <div class="user-name fs-1 fw-bold text-dark">
+          {{ user.name | titlecase }}
+        </div>
+
+        <div class="user-email fs-5 fw-bold text-dark">
+          {{ user.email }}
+        </div>
+      </div>
+
+      <div class="serpapi-details-section">
+        <div class="content-section">
+          Account Id:
+          <span class="fw-bold text-dark">{{ user.accountId }}</span>
+        </div>
+
+        <div class="content-section">
+          Plan: <span class="fw-bold text-dark">{{ user.planName }}</span>
+        </div>
+
+        <div class="content-section">
+          Account Status:
+          <span class="fw-bold text-dark">{{ user.accountStatus }}</span>
+        </div>
+
+        <div class="content-section">
+          This Month Usage:
+          <span class="fw-bold text-dark">{{ user.thisMonthUsage }}</span>
+        </div>
+
+        <div class="content-section">
+          Total Searches Left:
+          <span class="fw-bold text-dark"
+            >{{ user.totalSearchesLeft }} / {{ user.searchesPerMonth }}</span
+          >
+        </div>
+
+        <div class="content-section">
+          Created on:
+          <span class="fw-bold text-dark">{{ user.createdAt | date }}</span>
+        </div>
+
+        <div class="content-section">
+          Last Updated on:
+          <span class="fw-bold text-dark">{{ user.updatedAt | date }}</span>
+        </div>
+      </div>
+
+      <div class="options-section">
+        <div class="btn btn-dark" (click)="refreshUser()">Refresh</div>
+      </div>
+    </ng-container>
+
+    <ng-template #loaderContainer>
+      <div class="loader-wrapper">
+        <div class="spinner-border" role="status"></div>
+      </div>
+    </ng-template>
+  </div>
 </div>
