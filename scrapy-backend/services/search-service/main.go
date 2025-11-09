@@ -15,6 +15,7 @@ func main() {
 	cfg := config.LoadConfig()
 
 	app := fiber.New()
+	app.Use(middleware.CorsMiddleware())
 	app.Use(middleware.CamelCaseMiddleware)
 
 	serpClient := serpapi.NewSerpClient()
