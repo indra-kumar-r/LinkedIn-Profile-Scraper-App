@@ -81,7 +81,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(
         tap((res: Users) => {
           this.users = res?.users;
-          console.log('Users: ', this.users);
         }),
         catchError((err) => {
           console.error('Error: ', err);
