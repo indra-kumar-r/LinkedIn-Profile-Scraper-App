@@ -56,11 +56,11 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        component: SearchComponent, // default search
+        component: SearchComponent,
       },
       {
         path: ':searchId',
-        component: SearchComponent, // same component, different param
+        component: SearchComponent,
       },
     ],
   },
