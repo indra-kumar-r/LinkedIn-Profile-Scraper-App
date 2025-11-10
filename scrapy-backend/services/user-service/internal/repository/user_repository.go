@@ -44,21 +44,34 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *models.User) erro
 	return err
 }
 
-func (r *UserRepository) GetUsers(ctx context.Context) ([]*models.User, error) {
-	options := options.Find().SetSort(bson.M{"created_at": -1})
-	cursor, err := r.Collection.Find(ctx, bson.M{}, options)
+func (r *UserRepository) GetUsers(ctx context.Context) ([]*models.Users, error) {
+	projection := bson.M{
+		"uuid":                1,
+		"name":                1,
+		"email":               1,
+		"plan_name":           1,
+		"account_status":      1,
+		"total_searches_left": 1,
+		"created_at":          1,
+	}
+
+	findOptions := options.Find().
+		SetSort(bson.M{"created_at": -1}).
+		SetProjection(projection)
+
+	cursor, err := r.Collection.Find(ctx, bson.M{}, findOptions)
 	if err != nil {
 		return nil, err
 	}
 	defer cursor.Close(ctx)
 
-	var users []*models.User
+	var users []*models.Users
 	for cursor.Next(ctx) {
-		var user models.User
-		if err := cursor.Decode(&user); err != nil {
+		var u models.Users
+		if err := cursor.Decode(&u); err != nil {
 			return nil, err
 		}
-		users = append(users, &user)
+		users = append(users, &u)
 	}
 	return users, cursor.Err()
 }
