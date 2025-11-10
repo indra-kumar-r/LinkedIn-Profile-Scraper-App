@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"time"
 
 	"user-service/internal/models"
+	"user-service/internal/utils"
 
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
@@ -37,7 +37,7 @@ func NewUserRepository(db *mongo.Database) *UserRepository {
 
 func (r *UserRepository) CreateUser(ctx context.Context, user *models.User) error {
 	user.Uuid = uuid.New().String()
-	user.CreatedAt = getTime()
+	user.CreatedAt = utils.GetTime()
 	user.UpdatedAt = user.CreatedAt
 
 	_, err := r.Collection.InsertOne(ctx, user)
@@ -70,7 +70,7 @@ func (r *UserRepository) GetUser(ctx context.Context, uuid string) (*models.User
 }
 
 func (r *UserRepository) UpdateUser(ctx context.Context, uuid string, user bson.M) error {
-	user["updated_at"] = getTime()
+	user["updated_at"] = utils.GetTime()
 	_, err := r.Collection.UpdateOne(ctx, bson.M{"uuid": uuid}, bson.M{"$set": user})
 	return err
 }
@@ -78,12 +78,4 @@ func (r *UserRepository) UpdateUser(ctx context.Context, uuid string, user bson.
 func (r *UserRepository) DeleteUser(ctx context.Context, uuid string) error {
 	_, err := r.Collection.DeleteOne(ctx, bson.M{"uuid": uuid})
 	return err
-}
-
-func getTime() time.Time {
-	loc, err := time.LoadLocation("Asia/Kolkata")
-	if err != nil {
-		loc = time.FixedZone("IST", 5*60*60+30*60)
-	}
-	return time.Now().In(loc)
 }
