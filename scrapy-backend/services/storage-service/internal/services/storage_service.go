@@ -25,6 +25,6 @@ func (s *StorageService) GetSearchResult(ctx context.Context, searchID string) (
 	return s.StorageRepo.GetSearchResult(ctx, searchID)
 }
 
-func (s *StorageService) GetUserSearchResults(ctx context.Context, userID string) ([]models.SearchResult, error) {
-	return s.StorageRepo.GetUserSearchResults(ctx, userID)
+func (s *StorageService) GetUserSearchResults(ctx context.Context, userID string, page int, pageSize int) (int, []models.UserSearchResults, error) {
+	return s.StorageRepo.GetUserSearchResults(ctx, userID, page, pageSize)
 }
