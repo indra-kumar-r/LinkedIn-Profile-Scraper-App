@@ -45,7 +45,8 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *models.User) erro
 }
 
 func (r *UserRepository) GetUsers(ctx context.Context) ([]*models.User, error) {
-	cursor, err := r.Collection.Find(ctx, bson.M{})
+	options := options.Find().SetSort(bson.M{"created_at": -1})
+	cursor, err := r.Collection.Find(ctx, bson.M{}, options)
 	if err != nil {
 		return nil, err
 	}
