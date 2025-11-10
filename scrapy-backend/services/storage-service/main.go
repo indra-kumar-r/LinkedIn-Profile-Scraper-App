@@ -29,7 +29,7 @@ func main() {
 	storageHandler := handlers.NewStorageHandler(storageService)
 
 	app.Post("/api/v1/store", storageHandler.StoreSearchResults)
-	app.Get("/api/v1/search/results/:search_id", storageHandler.GetSearchResult)
+	app.Get("/api/v1/search/results/:search_id", storageHandler.GetSearchResults)
 	app.Get("/api/v1/user/results/:user_id", storageHandler.GetUserSearchResults)
 
 	if err := app.Listen(":" + cfg.Port); err != nil {

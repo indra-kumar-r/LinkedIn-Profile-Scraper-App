@@ -35,13 +35,13 @@ func (h *StorageHandler) StoreSearchResults(c *fiber.Ctx) error {
 	})
 }
 
-func (h *StorageHandler) GetSearchResult(c *fiber.Ctx) error {
+func (h *StorageHandler) GetSearchResults(c *fiber.Ctx) error {
 	searchID := c.Params("search_id")
 	if searchID == "" {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "missing search_id"})
 	}
 
-	results, err := h.StorageService.GetSearchResult(context.Background(), searchID)
+	results, err := h.StorageService.GetSearchResults(context.Background(), searchID)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

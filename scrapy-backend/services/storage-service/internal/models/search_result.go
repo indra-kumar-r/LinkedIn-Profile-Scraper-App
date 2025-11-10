@@ -40,3 +40,11 @@ type UserSearchResults struct {
 	SearchMetadata SearchMetadata `bson:"searchMetadata" json:"searchMetadata"`
 	SearchCount    int            `bson:"searchCount" json:"searchCount"`
 }
+
+type SearchResults struct {
+	SearchID            string          `bson:"searchId" json:"search_id"`
+	UserID              string          `bson:"userId" json:"user_id"`
+	Query               string          `bson:"query" json:"query"`
+	OrganicResults      []OrganicResult `bson:"organicResults" json:"organic_results"`
+	OrganicResultsCount int             `bson:"organicResultsCount" json:"organic_results_count"`
+}
