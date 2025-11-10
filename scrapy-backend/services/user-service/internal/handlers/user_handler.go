@@ -68,13 +68,14 @@ func (h *UserHandler) UpdateUser(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "invalid input"})
 	}
 
-	err := h.UserService.UpdateUser(c.Context(), uuid, &updateData)
+	user, err := h.UserService.UpdateUser(c.Context(), uuid, &updateData)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"message": "User updated successfully",
+		"user":    user,
 	})
 }
 

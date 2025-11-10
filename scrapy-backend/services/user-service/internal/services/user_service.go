@@ -69,14 +69,14 @@ func (s *UserService) GetUser(ctx context.Context, uuid string) (*models.User, e
 	return s.UserRepo.GetUser(ctx, uuid)
 }
 
-func (s *UserService) UpdateUser(ctx context.Context, uuid string, request *models.User) error {
+func (s *UserService) UpdateUser(ctx context.Context, uuid string, request *models.User) (*models.User, error) {
 	if request == nil {
-		return errors.New("no data provided for update")
+		return nil, errors.New("no data provided for update")
 	}
 
 	existingUser, err := s.UserRepo.GetUser(ctx, uuid)
 	if err != nil {
-		return fmt.Errorf("user not found: %v", err)
+		return nil, fmt.Errorf("user not found: %v", err)
 	}
 
 	serpAPIKey := request.SerpAPIKey
@@ -86,7 +86,7 @@ func (s *UserService) UpdateUser(ctx context.Context, uuid string, request *mode
 
 	accountDetails, err := s.fetchSerpAPIAccountData(serpAPIKey)
 	if err != nil {
-		return fmt.Errorf("failed to fetch SerpAPI data: %v", err)
+		return nil, fmt.Errorf("failed to fetch SerpAPI data: %v", err)
 	}
 
 	user := &models.User{

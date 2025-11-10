@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"user-service/internal/models"
 	"user-service/internal/utils"
@@ -82,10 +83,23 @@ func (r *UserRepository) GetUser(ctx context.Context, uuid string) (*models.User
 	return &user, err
 }
 
-func (r *UserRepository) UpdateUser(ctx context.Context, uuid string, user bson.M) error {
+func (r *UserRepository) UpdateUser(ctx context.Context, uuid string, user bson.M) (*models.User, error) {
 	user["updated_at"] = utils.GetTime()
-	_, err := r.Collection.UpdateOne(ctx, bson.M{"uuid": uuid}, bson.M{"$set": user})
-	return err
+
+	opts := options.FindOneAndUpdate().SetReturnDocument(options.After)
+	filter := bson.M{"uuid": uuid}
+	update := bson.M{"$set": user}
+
+	var updated models.User
+	err := r.Collection.FindOneAndUpdate(ctx, filter, update, opts).Decode(&updated)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, fmt.Errorf("user not found")
+		}
+		return nil, fmt.Errorf("failed to update user: %v", err)
+	}
+
+	return &updated, nil
 }
 
 func (r *UserRepository) DeleteUser(ctx context.Context, uuid string) error {
