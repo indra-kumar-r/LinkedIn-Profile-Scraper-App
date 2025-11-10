@@ -4,11 +4,20 @@ import (
 	"context"
 	"fmt"
 	"storage-service/internal/models"
+	"storage-service/internal/utils"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+)
+
+const (
+	defaultPage      = 1
+	defaultPageSize  = 10
+	maxPageSize      = 100
+	countTimeout     = 10 * time.Second
+	aggregateTimeout = 15 * time.Second
 )
 
 type StorageRepository struct {
@@ -39,7 +48,7 @@ func NewStorageRepository(db *mongo.Database) (*StorageRepository, error) {
 }
 
 func (r *StorageRepository) StoreSearchResults(ctx context.Context, result *models.SearchResult) error {
-	result.CreatedAt = getTime()
+	result.CreatedAt = utils.GetTime()
 
 	filter := bson.M{
 		"search_id": result.SearchID,
@@ -86,26 +95,109 @@ func (r *StorageRepository) GetSearchResult(ctx context.Context, searchID string
 	return results, nil
 }
 
-func (r *StorageRepository) GetUserSearchResults(ctx context.Context, userID string) ([]models.SearchResult, error) {
-	filter := bson.M{"user_id": userID}
-	cursor, err := r.Collection.Find(ctx, filter)
+func (r *StorageRepository) GetUserSearchResults(ctx context.Context, userID string, page int, pageSize int) (int, []models.UserSearchResults, error) {
+	page, pageSize = normalizePagination(page, pageSize)
+
+	totalResults, err := r.getDistinctSearches(ctx, userID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to fetch user results: %v", err)
+		return 0, nil, fmt.Errorf("count distinct search_ids: %w", err)
+	}
+
+	skip := (page - 1) * pageSize
+	searchResults, err := r.getGroupedSearches(ctx, userID, skip, pageSize)
+	if err != nil {
+		return 0, nil, fmt.Errorf("aggregate grouped searches: %w", err)
+	}
+
+	return totalResults, searchResults, nil
+}
+
+func normalizePagination(page, pageSize int) (int, int) {
+	if page < 1 {
+		page = defaultPage
+	}
+	if pageSize < 1 {
+		pageSize = defaultPageSize
+	}
+	if pageSize > maxPageSize {
+		pageSize = maxPageSize
+	}
+	return page, pageSize
+}
+
+func (r *StorageRepository) getDistinctSearches(parentCtx context.Context, userID string) (int, error) {
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: bson.M{"user_id": userID}}},
+		{{Key: "$group", Value: bson.M{"_id": "$search_id"}}},
+		{{Key: "$count", Value: "total"}},
+	}
+
+	ctx, cancel := context.WithTimeout(parentCtx, countTimeout)
+	defer cancel()
+
+	cursor, err := r.Collection.Aggregate(ctx, pipeline)
+	if err != nil {
+		return 0, fmt.Errorf("aggregate count pipeline: %v", err)
 	}
 	defer cursor.Close(ctx)
 
-	var results []models.SearchResult
+	var result struct {
+		Total int `bson:"total"`
+	}
+	if cursor.Next(ctx) {
+		if err := cursor.Decode(&result); err != nil {
+			return 0, fmt.Errorf("decode count result: %v", err)
+		}
+		return result.Total, nil
+	}
+
+	if err := cursor.Err(); err != nil {
+		return 0, fmt.Errorf("cursor error while counting groups: %v", err)
+	}
+	return 0, nil
+}
+
+func (r *StorageRepository) getGroupedSearches(parentCtx context.Context, userID string, skip, limit int) ([]models.UserSearchResults, error) {
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: bson.M{"user_id": userID}}},
+		{{Key: "$sort", Value: bson.D{{Key: "created_at", Value: -1}}}},
+		{{
+			Key: "$group", Value: bson.M{
+				"_id":            "$search_id",
+				"createdAt":      bson.M{"$first": "$created_at"},
+				"query":          bson.M{"$first": "$query"},
+				"searchMetadata": bson.M{"$first": "$results.search_metadata"},
+				"searchCount":    bson.M{"$sum": 1},
+			},
+		}},
+		{{Key: "$sort", Value: bson.D{{Key: "createdAt", Value: -1}}}},
+		{{Key: "$skip", Value: skip}},
+		{{Key: "$limit", Value: limit}},
+		{{
+			Key: "$project", Value: bson.M{
+				"_id":            0,
+				"searchId":       "$_id",
+				"createdAt":      1,
+				"query":          1,
+				"searchMetadata": 1,
+				"searchCount":    1,
+			},
+		}},
+	}
+
+	ctx, cancel := context.WithTimeout(parentCtx, aggregateTimeout)
+	defer cancel()
+
+	cursor, err := r.Collection.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, fmt.Errorf("aggregate data pipeline: %v", err)
+	}
+	defer cursor.Close(ctx)
+
+	var results []models.UserSearchResults
 	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("failed to decode user results: %v", err)
+		return nil, fmt.Errorf("decode grouped results: %v", err)
 	}
 
 	return results, nil
-}
-
-func getTime() time.Time {
-	loc, err := time.LoadLocation("Asia/Kolkata")
-	if err != nil {
-		loc = time.FixedZone("IST", 5*60*60+30*60)
-	}
-	return time.Now().In(loc)
 }

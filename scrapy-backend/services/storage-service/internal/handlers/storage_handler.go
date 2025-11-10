@@ -6,6 +6,7 @@ import (
 
 	"storage-service/internal/models"
 	"storage-service/internal/services"
+	"storage-service/internal/utils"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -57,13 +58,28 @@ func (h *StorageHandler) GetUserSearchResults(c *fiber.Ctx) error {
 		return c.Status(http.StatusBadRequest).JSON(fiber.Map{"error": "missing user_id"})
 	}
 
-	results, err := h.StorageService.GetUserSearchResults(context.Background(), userID)
+	pageStr := c.Query("page", "1")
+	pageSizeStr := c.Query("page_size", "10")
+	page, pageSize := utils.ParsePagination(pageStr, pageSizeStr)
+
+	totalResults, searchResults, err := h.StorageService.GetUserSearchResults(context.Background(), userID, page, pageSize)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
+	totalPages := 0
+	if totalResults > 0 {
+		totalPages = (totalResults + pageSize - 1) / pageSize
+	}
+
 	return c.Status(http.StatusOK).JSON(fiber.Map{
 		"message": "Results fetched successfully",
-		"results": results,
+		"pagination": fiber.Map{
+			"page":         page,
+			"pageSize":     pageSize,
+			"totalPages":   totalPages,
+			"totalResults": totalResults,
+		},
+		"results": searchResults,
 	})
 }
