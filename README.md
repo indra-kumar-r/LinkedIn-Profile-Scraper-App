@@ -70,12 +70,6 @@ The goal: **reduce hours of sourcing into minutes**.
 
 This project follows a **microservices architecture** — each service is modular and responsible for a single domain.
 
-scrapy-backend/
-├── search-service # Handles API search requests & SerpAPI integration
-├── storage-service # Stores & aggregates search results
-└── user-service # Manages users, API keys, and plan info
-
-
 ### 🧩 Example Flow
 
 1. **User logs in** via the frontend.
