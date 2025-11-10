@@ -26,6 +26,16 @@ type User struct {
 	UpdatedAt               time.Time          `bson:"updated_at" json:"updated_at"`
 }
 
+type Users struct {
+	Uuid              string    `bson:"uuid" json:"uuid"`
+	Name              string    `bson:"name" json:"name"`
+	Email             string    `bson:"email" json:"email"`
+	PlanName          string    `bson:"plan_name,omitempty" json:"planName,omitempty"`
+	AccountStatus     string    `bson:"account_status,omitempty" json:"accountStatus,omitempty"`
+	TotalSearchesLeft int       `bson:"total_searches_left,omitempty" json:"totalSearchesLeft,omitempty"`
+	CreatedAt         time.Time `bson:"created_at" json:"createdAt"`
+}
+
 type CreateUserRequest struct {
 	Name       string `json:"name"`
 	Email      string `json:"email"`
