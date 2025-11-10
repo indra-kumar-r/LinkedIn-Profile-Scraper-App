@@ -103,6 +103,7 @@ func (s *UserService) UpdateUser(ctx context.Context, uuid string, request *mode
 		LastHourSearches:        accountDetails.LastHourSearches,
 		AccountRateLimitPerHour: accountDetails.AccountRateLimitPerHour,
 		RemainingCredits:        accountDetails.TotalSearchesLeft,
+		CreatedAt:               existingUser.CreatedAt,
 	}
 
 	updatedUser := structConversion(user)
