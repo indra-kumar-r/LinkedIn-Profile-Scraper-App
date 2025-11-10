@@ -79,20 +79,65 @@ func (r *StorageRepository) StoreSearchResults(ctx context.Context, result *mode
 	return nil
 }
 
-func (r *StorageRepository) GetSearchResult(ctx context.Context, searchID string) ([]models.SearchResult, error) {
-	filter := bson.M{"search_id": searchID}
-	cursor, err := r.Collection.Find(ctx, filter)
+func (r *StorageRepository) GetSearchResults(ctx context.Context, searchID string) (*models.SearchResults, error) {
+	pipeline := mongo.Pipeline{
+		{{Key: "$match", Value: bson.M{"search_id": searchID}}},
+		{{Key: "$project", Value: bson.M{
+			"organic":    "$results.organic_results",
+			"query":      "$query",
+			"user_id":    "$user_id",
+			"created_at": "$created_at",
+		}}},
+		{{Key: "$unwind", Value: bson.M{
+			"path": "$organic",
+		}}},
+		{{
+			Key: "$group", Value: bson.M{
+				"_id":                 searchID,
+				"query":               bson.M{"$first": "$query"},
+				"user_id":             bson.M{"$first": "$user_id"},
+				"organicResults":      bson.M{"$push": "$organic"},
+				"organicResultsCount": bson.M{"$sum": 1},
+			},
+		}},
+		{{
+			Key: "$project", Value: bson.M{
+				"_id":                 0,
+				"searchId":            "$_id",
+				"userId":              "$user_id",
+				"query":               "$query",
+				"organicResults":      "$organicResults",
+				"organicResultsCount": "$organicResultsCount",
+			},
+		}},
+	}
+
+	ctxAgg, cancel := context.WithTimeout(ctx, 15*time.Second)
+	defer cancel()
+
+	cursor, err := r.Collection.Aggregate(ctxAgg, pipeline)
 	if err != nil {
-		return nil, fmt.Errorf("failed to fetch results: %v", err)
+		return nil, fmt.Errorf("failed to aggregate search results: %v", err)
 	}
-	defer cursor.Close(ctx)
+	defer cursor.Close(ctxAgg)
 
-	var results []models.SearchResult
-	if err := cursor.All(ctx, &results); err != nil {
-		return nil, fmt.Errorf("failed to decode results: %v", err)
+	if !cursor.Next(ctxAgg) {
+		empty := &models.SearchResults{
+			SearchID:            searchID,
+			UserID:              "",
+			Query:               "",
+			OrganicResults:      []models.OrganicResult{},
+			OrganicResultsCount: 0,
+		}
+		return empty, nil
 	}
 
-	return results, nil
+	var results models.SearchResults
+	if err := cursor.Decode(&results); err != nil {
+		return nil, fmt.Errorf("failed to decode aggregated results: %v", err)
+	}
+
+	return &results, nil
 }
 
 func (r *StorageRepository) GetUserSearchResults(ctx context.Context, userID string, page int, pageSize int) (int, []models.UserSearchResults, error) {

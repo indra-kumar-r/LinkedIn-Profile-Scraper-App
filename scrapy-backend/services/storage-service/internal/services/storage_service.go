@@ -21,8 +21,8 @@ func (s *StorageService) StoreSearchResults(ctx context.Context, req *models.Sea
 	return nil
 }
 
-func (s *StorageService) GetSearchResult(ctx context.Context, searchID string) ([]models.SearchResult, error) {
-	return s.StorageRepo.GetSearchResult(ctx, searchID)
+func (s *StorageService) GetSearchResults(ctx context.Context, searchID string) (*models.SearchResults, error) {
+	return s.StorageRepo.GetSearchResults(ctx, searchID)
 }
 
 func (s *StorageService) GetUserSearchResults(ctx context.Context, userID string, page int, pageSize int) (int, []models.UserSearchResults, error) {
