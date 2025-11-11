@@ -8,7 +8,7 @@ import { Auth } from '../../../models/shared.model';
 @Injectable({
   providedIn: 'root',
 })
-export class StorageService {
+export class BrowserStorageService {
   private setLocalStorageData(key: string, value: any) {
     localStorage.setItem(key, JSON.stringify(value));
   }
