@@ -9,13 +9,11 @@
     </div>
 
     <ng-container *ngIf="!loadingSearchQueries; else loaderContainer">
-      <ng-container
-        *ngIf="searchResults.length > 0; else emptyResultsContainer"
-      >
+      <ng-container *ngIf="totalResults > 0; else emptyResultsContainer">
         <div class="search-queries-section">
           <div class="search-queries-headers-section text-secondary fw-bold">
             <span class="fs-6 text-dark">
-              {{ searchResults.length }}
+              {{ totalResults }}
             </span>
 
             search queries
@@ -63,6 +61,39 @@
             </div>
           </div>
         </div>
+
+        <ng-container *ngIf="totalPages > 1">
+          <div class="pagination-container">
+            <button
+              class="btn btn-dark"
+              [disabled]="page <= 1"
+              (click)="prevPage()"
+            >
+              Previous
+            </button>
+
+            <div class="input-section">
+              <span>Page</span>
+
+              <input
+                type="number"
+                [formControl]="pageControl"
+                [min]="1"
+                [max]="totalPages || null"
+              />
+
+              <span>of {{ totalPages }}</span>
+            </div>
+
+            <button
+              class="btn btn-dark"
+              [disabled]="totalPages && page >= totalPages"
+              (click)="nextPage()"
+            >
+              Next
+            </button>
+          </div>
+        </ng-container>
       </ng-container>
 
       <ng-template #emptyResultsContainer>
