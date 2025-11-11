@@ -1,3 +1,7 @@
+export const SearchApis = {
+  SEARCH: '/api/v1/search',
+};
+
 export const UsersApis = {
   USERS: '/api/v1/users',
 };
