@@ -37,7 +37,6 @@ type UserSearchResults struct {
 	SearchID       string         `bson:"searchId" json:"searchId"`
 	CreatedAt      time.Time      `bson:"createdAt" json:"createdAt"`
 	Query          string         `bson:"query" json:"query"`
-	SearchMetadata SearchMetadata `bson:"searchMetadata" json:"searchMetadata"`
 	SearchCount    int            `bson:"searchCount" json:"searchCount"`
 }
 

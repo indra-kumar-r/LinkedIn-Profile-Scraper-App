@@ -208,11 +208,10 @@ func (r *StorageRepository) getGroupedSearches(parentCtx context.Context, userID
 		{{Key: "$sort", Value: bson.D{{Key: "created_at", Value: -1}}}},
 		{{
 			Key: "$group", Value: bson.M{
-				"_id":            "$search_id",
-				"createdAt":      bson.M{"$first": "$created_at"},
-				"query":          bson.M{"$first": "$query"},
-				"searchMetadata": bson.M{"$first": "$results.search_metadata"},
-				"searchCount":    bson.M{"$sum": 1},
+				"_id":         "$search_id",
+				"createdAt":   bson.M{"$first": "$created_at"},
+				"query":       bson.M{"$first": "$query"},
+				"searchCount": bson.M{"$sum": 1},
 			},
 		}},
 		{{Key: "$sort", Value: bson.D{{Key: "createdAt", Value: -1}}}},
@@ -220,12 +219,11 @@ func (r *StorageRepository) getGroupedSearches(parentCtx context.Context, userID
 		{{Key: "$limit", Value: limit}},
 		{{
 			Key: "$project", Value: bson.M{
-				"_id":            0,
-				"searchId":       "$_id",
-				"createdAt":      1,
-				"query":          1,
-				"searchMetadata": 1,
-				"searchCount":    1,
+				"_id":         0,
+				"searchId":    "$_id",
+				"createdAt":   1,
+				"query":       1,
+				"searchCount": 1,
 			},
 		}},
 	}
