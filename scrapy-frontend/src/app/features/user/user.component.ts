@@ -69,8 +69,8 @@ export class UserComponent implements OnInit, OnDestroy {
     this.userService
       .update(this.userId, user)
       .pipe(
-        tap(() => {
-          this.fetchUser();
+        tap((res: UserResponse) => {
+          this.user = res?.user;
         }),
         catchError((err) => {
           console.error('Error: ', err);

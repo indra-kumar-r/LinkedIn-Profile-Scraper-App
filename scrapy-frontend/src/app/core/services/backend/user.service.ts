@@ -28,8 +28,8 @@ export class UserService {
     );
   }
 
-  update(userId: string, user: Partial<User>): Observable<User> {
-    return this.http.put<User>(
+  update(userId: string, user: Partial<User>): Observable<UserResponse> {
+    return this.http.put<UserResponse>(
       `${UsersApis.USERS}/${encodeURIComponent(userId)}`,
       user,
       this.apiUrl
