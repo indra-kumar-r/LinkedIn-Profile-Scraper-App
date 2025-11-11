@@ -61,5 +61,6 @@ export const routes: Routes = [
   {
     path: '**',
     component: PageNotFoundComponent,
+    canActivate: [authGuard],
   },
 ];

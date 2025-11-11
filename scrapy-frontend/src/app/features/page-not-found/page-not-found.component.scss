@@ -26,8 +26,7 @@
       letter-spacing: 4px;
       font-size: 64px;
       font-weight: bold;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(90deg, #ff7a1a, #ff6a00, #ff7a1a);
+      background: linear-gradient(90deg, black, #414141, black);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -46,13 +45,17 @@
     img {
       width: 20%;
       object-fit: contain;
-      filter: hue-rotate(240deg);
+    }
+
+    .info-section {
+      letter-spacing: 12px;
+      margin-bottom: 12px;
     }
 
     .btns {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 16px;
     }
   }
 }

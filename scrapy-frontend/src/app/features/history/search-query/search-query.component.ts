@@ -44,7 +44,7 @@ export class SearchQueryComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ searchId }) => {
         this.searchId = searchId;
-        this.fetchSearchQuery();
+        this.fetchSearchResults();
       });
   }
 
@@ -53,7 +53,7 @@ export class SearchQueryComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  fetchSearchQuery(): void {
+  fetchSearchResults(): void {
     this.loadingSearchQuery = true;
 
     this.storageService
