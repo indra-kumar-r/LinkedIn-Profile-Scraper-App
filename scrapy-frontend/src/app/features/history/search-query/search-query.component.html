@@ -3,5 +3,66 @@
     <app-sidebar></app-sidebar>
   </div>
 
-  <div class="search-query-container"></div>
+  <div class="search-query-container">
+    <div class="header-section">
+      <div class="navigate-btn fs-5" (click)="navigateBack()">
+        <i class="bi bi-arrow-left-circle"></i>
+      </div>
+
+      <div class="text-secondary fw-bold text-uppercase">Search Query</div>
+    </div>
+
+    <div class="search-query-details-section">
+      <div
+        class="query-content-section"
+        (click)="$event.stopPropagation(); copySearchQuery()"
+      >
+        <div class="fw-bold text-secondary">
+          {{ this.searchQuery.query }}
+        </div>
+
+        <div class="copy-btn">
+          <i class="bi bi-copy fs-5"></i>
+        </div>
+      </div>
+
+      <div class="search-query-options-section">
+        <div class="count-section text-dark fw-bold">
+          {{ this.searchQuery.organicResultsCount }} results
+        </div>
+
+        <div class="btns-section">
+          <button class="btn btn-dark">Export</button>
+        </div>
+      </div>
+
+      <div class="search-query-results-section">
+        <div
+          class="search-item"
+          *ngFor="let item of this.searchQuery.organicResults"
+        >
+          <div class="title-section">
+            <span class="text-dark fs-5 fw-bold">{{ item.title }}</span>
+
+            <div class="item-btns text-dark fw-bold">
+              <div class="item-btn" (click)="viewLinkedinProfile(item.link)">
+                View Profile <i class="bi bi-link fs-5"></i>
+              </div>
+
+              <div class="item-btn" (click)="copyLinkedinUrl(item.link)">
+                Copy Link
+                <i class="bi bi-copy fs-6"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="link-section text-primary">
+            <i class="bi bi-linkedin"></i> {{ item.link }}
+          </div>
+
+          <div class="snippet-section">{{ item.snippet }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
