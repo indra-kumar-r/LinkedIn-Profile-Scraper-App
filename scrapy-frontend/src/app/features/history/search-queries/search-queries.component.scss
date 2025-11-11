@@ -17,7 +17,110 @@
   .search-queries-container {
     width: 95%;
     height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px 48px;
     border-radius: 8px;
     box-shadow: 0 0 12px 8px rgba(211, 211, 211, 0.3);
+
+    .header-section {
+      width: 100%;
+      color: #8292bd;
+      font-family: Manrope;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 150%;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+    }
+
+    .search-queries-section {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+      overflow: hidden;
+
+      .search-queries-headers-section {
+        width: 100%;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .search-queries-details-section {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 24px;
+        padding: 24px 0;
+        overflow: auto;
+
+        .search-query {
+          width: 75%;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          padding: 24px;
+          color: #8292bd;
+          font-family: Manrope;
+          font-size: small;
+          font-style: normal;
+          line-height: 150%;
+          border-radius: 8px;
+          box-shadow: 0 0 12px 8px #62668c14;
+          cursor: pointer;
+          transition: all 0.3s ease-in-out;
+
+          &:hover {
+            box-shadow: 0 0 24px 8px #62668c14;
+            transform: scale(1.025);
+          }
+
+          .query-content-section {
+            display: flex;
+
+            &.query-detail-section {
+              display: flex;
+              gap: 12px;
+            }
+
+            .query-content {
+              display: flex;
+              align-items: flex-start;
+              gap: 8px;
+            }
+
+            .copy-btn {
+              transition: all 0.3s ease-in-out;
+
+              &:hover {
+                transform: translateY(-1.5px);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .empty-results-section {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+    }
   }
 }
