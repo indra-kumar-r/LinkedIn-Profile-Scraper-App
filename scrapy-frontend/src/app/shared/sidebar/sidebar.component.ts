@@ -19,6 +19,10 @@ export class SidebarComponent {
     this.router.navigate([path]);
   }
 
+  navigateToSearch() {
+    this.router.navigate(['search']);
+  }
+
   logout(): void {
     this.authService.logout();
   }
