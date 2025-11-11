@@ -5,7 +5,7 @@ import { UserService } from '../../core/services/backend';
 import { catchError, finalize, of, Subject, takeUntil, tap } from 'rxjs';
 import { User, UserResponse } from '../../models/user.model';
 import { ToasterService } from '../../core/services/toaster/toaster.service';
-import { StorageService } from '../../core/services/storage/storage.service';
+import { BrowserStorageService } from '../../core/services/browser-storage/browser-storage.service';
 
 @Component({
   selector: 'app-user',
@@ -23,11 +23,11 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private toasterService: ToasterService,
-    private storageService: StorageService
+    private browserStorageService: BrowserStorageService
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.storageService?.auth?.userId!;
+    this.userId = this.browserStorageService?.auth?.userId!;
     this.fetchUser();
   }
 
