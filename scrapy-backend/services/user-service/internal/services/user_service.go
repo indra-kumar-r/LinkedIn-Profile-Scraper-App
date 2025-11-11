@@ -35,7 +35,7 @@ func (s *UserService) CreateUser(ctx context.Context, request *models.CreateUser
 
 	accountDetails, err := s.fetchSerpAPIAccountData(request.SerpAPIKey)
 	if err != nil {
-		return nil, fmt.Errorf("invalid SerpAPI key: %v", err)
+		return nil, fmt.Errorf("%v", err)
 	}
 
 	user := &models.User{
