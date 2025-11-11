@@ -70,7 +70,7 @@
   </ng-container>
 
   <div class="form-container">
-    <form [formGroup]="userForm">
+    <form [formGroup]="userForm" (ngSubmit)="createUser()">
       <div class="text-secondary fw-bold fs-6 form-header">
         New user? Sign in
       </div>
@@ -100,15 +100,27 @@
         <div class="verification-section"></div>
       </div>
 
+      <ng-container *ngIf="errorMessage">
+        <div class="error-section text-danger fw-bold">{{ errorMessage }}</div>
+      </ng-container>
+
       <div class="btns">
         <button
-          type="button"
+          type="submit"
           class="btn btn-success"
           [disabled]="userForm.invalid"
-          (click)="createUser()"
         >
           Sign in
         </button>
+      </div>
+
+      <div
+        class="register-btn text-primary fw-bold"
+        (click)="navigateToRegister()"
+      >
+        Get Serp API Key
+
+        <i class="bi bi-link fs-5"></i>
       </div>
     </form>
   </div>

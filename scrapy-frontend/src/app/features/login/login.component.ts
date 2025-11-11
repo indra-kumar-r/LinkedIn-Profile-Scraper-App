@@ -13,7 +13,12 @@ import { UserService } from '../../core/services/backend';
 import { ToasterService } from '../../core/services/toaster/toaster.service';
 import { catchError, finalize, of, Subject, takeUntil, tap } from 'rxjs';
 import { Auth } from '../../models/shared.model';
-import { User, UserResponse, Users } from '../../models/user.model';
+import {
+  User,
+  UserCreationParams,
+  UserResponse,
+  Users,
+} from '../../models/user.model';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../../shared/input/input.component';
 
@@ -33,6 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   loadingUsers = false;
   creatingUser = false;
+  errorMessage!: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -57,7 +63,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       name: [null, Validators.required],
       email: [null, Validators.required],
       serpapiKey: [null, Validators.required],
-      verification: [null, Validators.required],
     });
   }
 
@@ -106,8 +111,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.creatingUser = true;
 
+    const payload: UserCreationParams = {
+      name: this.userForm.value.name,
+      email: this.userForm.value.email,
+      serpapi_key: this.userForm.value.serpapiKey,
+    };
+
     this.userService
-      .create(this.userForm.value)
+      .create(payload)
       .pipe(
         tap((response: UserResponse) => {
           const user = response?.user;
@@ -117,12 +128,13 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.login();
           }
 
-          this.toasterService.toast('User created successfully, logging in...');
+          this.toasterService.toast('User created successfully');
 
           this.userForm.reset();
         }),
-        catchError((err) => {
-          console.error('Error creating user: ', err);
+        catchError((error) => {
+          this.errorMessage = error?.error?.error;
+          console.error('Error creating user: ', error);
           this.toasterService.toast('Failed to create user');
           return of(null);
         }),
@@ -132,5 +144,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe();
+  }
+
+  navigateToRegister(): void {
+    window.open('https://serpapi.com/manage-api-key', '_blank');
   }
 }

@@ -24,3 +24,9 @@ export interface User {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface UserCreationParams {
+  name: string;
+  email: User;
+  serpapi_key: string;
+}
