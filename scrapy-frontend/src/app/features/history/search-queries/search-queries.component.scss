@@ -121,6 +121,12 @@
       justify-content: center;
       flex-direction: column;
       gap: 8px;
+
+      img {
+        width: 20%;
+        object-fit: contain;
+        filter: hue-rotate(320deg);
+      }
     }
   }
 }

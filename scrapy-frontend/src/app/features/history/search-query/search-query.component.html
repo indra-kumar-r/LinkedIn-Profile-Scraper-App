@@ -12,57 +12,87 @@
       <div class="text-secondary fw-bold text-uppercase">Search Query</div>
     </div>
 
-    <div class="search-query-details-section">
-      <div
-        class="query-content-section"
-        (click)="$event.stopPropagation(); copySearchQuery()"
-      >
-        <div class="fw-bold text-secondary">
-          {{ this.searchQuery.query }}
-        </div>
+    <ng-container *ngIf="!loadingSearchQuery; else loaderContainer">
+      <div class="search-query-details-section">
+        <ng-container *ngIf="this.searchQuery.query">
+          <div
+            class="query-content-section"
+            (click)="$event.stopPropagation(); copySearchQuery()"
+          >
+            <div class="fw-bold text-secondary">
+              {{ this.searchQuery.query }}
+            </div>
 
-        <div class="copy-btn">
-          <i class="bi bi-copy fs-5"></i>
-        </div>
-      </div>
+            <div class="copy-btn">
+              <i class="bi bi-copy fs-5"></i>
+            </div>
+          </div>
+        </ng-container>
 
-      <div class="search-query-options-section">
-        <div class="count-section text-dark fw-bold">
-          {{ this.searchQuery.organicResultsCount }} results
-        </div>
-
-        <div class="btns-section">
-          <button class="btn btn-dark">Export</button>
-        </div>
-      </div>
-
-      <div class="search-query-results-section">
-        <div
-          class="search-item"
-          *ngFor="let item of this.searchQuery.organicResults"
+        <ng-container
+          *ngIf="
+            this.searchQuery.organicResults.length > 0;
+            else emptyResultsContainer
+          "
         >
-          <div class="title-section">
-            <span class="text-dark fs-5 fw-bold">{{ item.title }}</span>
+          <div class="search-query-options-section">
+            <div class="count-section text-dark fw-bold">
+              {{ this.searchQuery.organicResultsCount }} results
+            </div>
 
-            <div class="item-btns text-dark fw-bold">
-              <div class="item-btn" (click)="viewLinkedinProfile(item.link)">
-                View Profile <i class="bi bi-link fs-5"></i>
-              </div>
-
-              <div class="item-btn" (click)="copyLinkedinUrl(item.link)">
-                Copy Link
-                <i class="bi bi-copy fs-6"></i>
-              </div>
+            <div class="btns-section">
+              <button class="btn btn-dark">Export</button>
             </div>
           </div>
 
-          <div class="link-section text-primary">
-            <i class="bi bi-linkedin"></i> {{ item.link }}
-          </div>
+          <div class="search-query-results-section">
+            <div
+              class="search-item"
+              *ngFor="let item of this.searchQuery.organicResults"
+            >
+              <div class="title-section">
+                <span class="text-dark fs-5 fw-bold">{{ item.title }}</span>
 
-          <div class="snippet-section">{{ item.snippet }}</div>
-        </div>
+                <div class="item-btns text-dark fw-bold">
+                  <div
+                    class="item-btn"
+                    (click)="viewLinkedinProfile(item.link)"
+                  >
+                    View Profile <i class="bi bi-link fs-5"></i>
+                  </div>
+
+                  <div class="item-btn" (click)="copyLinkedinUrl(item.link)">
+                    Copy Link
+                    <i class="bi bi-copy fs-6"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="link-section text-primary">
+                <i class="bi bi-linkedin"></i> {{ item.link }}
+              </div>
+
+              <div class="snippet-section">{{ item.snippet }}</div>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #emptyResultsContainer>
+          <div class="empty-results-section">
+            <img src="empty_results.png" alt="Logo" />
+
+            <div class="info text-secondary fw-bold text-uppercase">
+              No search results found!
+            </div>
+          </div>
+        </ng-template>
       </div>
-    </div>
+    </ng-container>
+
+    <ng-template #loaderContainer>
+      <div class="loader-wrapper">
+        <div class="spinner-border" role="status"></div>
+      </div>
+    </ng-template>
   </div>
 </div>
