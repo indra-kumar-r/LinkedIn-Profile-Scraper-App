@@ -1,127 +1,145 @@
 <div class="login-wrapper">
-  <div class="logo-container">
-    <img src="logo.png" alt="Logo" />
+  <ng-container *ngIf="!loadingUsers; else loaderContainer">
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo" />
 
-    <div class="logo-text fs-3 fw-bolder text-secondary text-uppercase">
-      Scrapy
-    </div>
-  </div>
-
-  <ng-container *ngIf="users.length > 0">
-    <div class="users-container">
-      <div class="info text-secondary fw-bold">
-        <span class="text-dark">
-          {{ users.length }}
-        </span>
-
-        users found, select user to continue
+      <div class="logo-text fs-3 fw-bolder text-secondary text-uppercase">
+        Scrapy
       </div>
+    </div>
 
-      <div class="users">
-        <div
-          class="user"
-          *ngFor="let user of users"
-          (click)="selectUser(user.uuid)"
-        >
-          <div class="user-header-section">
-            <div class="user-name-section fs-3 text-dark fw-bold">
-              {{ user.name | titlecase }}
-            </div>
-          </div>
+    <ng-container *ngIf="users.length > 0">
+      <div class="users-container">
+        <div class="info text-secondary fw-bold">
+          <span class="text-dark">
+            {{ users.length }}
+          </span>
 
-          <div class="user-body-section">
-            <div class="content-section serpapi-details-section">
-              <div class="details-section text-secondary">
-                Email:
-                <span class="fw-bold text-dark">
-                  {{ user.email }}
-                </span>
-              </div>
+          users found, select user to continue
+        </div>
 
-              <div class="details-section text-secondary">
-                Plan:
-                <span class="fw-bold text-dark">{{ user.planName }}</span>
-              </div>
-
-              <div class="details-section text-secondary">
-                Status:
-                <span class="fw-bold text-dark">
-                  {{ user.accountStatus }}
-                </span>
-              </div>
-
-              <div class="details-section text-secondary">
-                Searches left:
-                <span class="fw-bold text-dark">
-                  {{ user.totalSearchesLeft }}
-                </span>
+        <div class="users">
+          <div
+            class="user"
+            *ngFor="let user of users"
+            (click)="selectUser(user.uuid)"
+          >
+            <div class="user-header-section">
+              <div class="user-name-section fs-3 text-dark fw-bold">
+                {{ user.name | titlecase }}
               </div>
             </div>
 
-            <div class="content-section text-secondary fw-bold">
-              Created on: <span>{{ user.createdAt | date }}</span>
+            <div class="user-body-section">
+              <div class="content-section serpapi-details-section">
+                <div class="details-section text-secondary">
+                  Email:
+                  <span class="fw-bold text-dark">
+                    {{ user.email }}
+                  </span>
+                </div>
+
+                <div class="details-section text-secondary">
+                  Plan:
+                  <span class="fw-bold text-dark">{{ user.planName }}</span>
+                </div>
+
+                <div class="details-section text-secondary">
+                  Status:
+                  <span class="fw-bold text-dark">
+                    {{ user.accountStatus }}
+                  </span>
+                </div>
+
+                <div class="details-section text-secondary">
+                  Searches left:
+                  <span class="fw-bold text-dark">
+                    {{ user.totalSearchesLeft }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="content-section text-secondary fw-bold">
+                Created on: <span>{{ user.createdAt | date }}</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="divider"></div>
+      <div class="divider"></div>
+    </ng-container>
+
+    <div class="form-container">
+      <form [formGroup]="userForm" (ngSubmit)="createUser()">
+        <div class="text-secondary fw-bold fs-6 form-header">
+          New user? Sign in
+        </div>
+
+        <div class="input-section">
+          <app-input
+            label="User Name"
+            placeholder="Enter user name"
+            type="text"
+            [formControl]="getControl('name')"
+          ></app-input>
+
+          <app-input
+            label="User Email"
+            placeholder="Enter user email"
+            type="email"
+            [formControl]="getControl('email')"
+          ></app-input>
+
+          <app-input
+            label="Serp API Key"
+            placeholder="Enter serp api key"
+            type="text"
+            [formControl]="getControl('serpapiKey')"
+          ></app-input>
+
+          <div class="verification-section"></div>
+        </div>
+
+        <ng-container *ngIf="errorMessage">
+          <div class="error-section text-danger fw-bold">
+            {{ errorMessage }}
+          </div>
+        </ng-container>
+
+        <div class="btns">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="userForm.invalid"
+          >
+            {{ creatingUser ? "Signing..." : "Sign in" }}
+          </button>
+        </div>
+
+        <div
+          class="register-btn text-primary fw-bold"
+          (click)="navigateToRegister()"
+        >
+          Get Serp API Key
+
+          <i class="bi bi-link fs-5"></i>
+        </div>
+      </form>
+    </div>
   </ng-container>
 
-  <div class="form-container">
-    <form [formGroup]="userForm" (ngSubmit)="createUser()">
-      <div class="text-secondary fw-bold fs-6 form-header">
-        New user? Sign in
+  <ng-template #loaderContainer>
+    <div class="loader-wrapper">
+      <div class="logo-section">
+        <img src="logo.png" alt="Logo" />
+
+        <div class="logo-text fs-4 fw-bolder text-secondary text-uppercase">
+          Scrapy
+        </div>
       </div>
 
-      <div class="input-section">
-        <app-input
-          label="User Name"
-          placeholder="Enter user name"
-          type="text"
-          [formControl]="getControl('name')"
-        ></app-input>
-
-        <app-input
-          label="User Email"
-          placeholder="Enter user email"
-          type="email"
-          [formControl]="getControl('email')"
-        ></app-input>
-
-        <app-input
-          label="Serp API Key"
-          placeholder="Enter serp api key"
-          type="text"
-          [formControl]="getControl('serpapiKey')"
-        ></app-input>
-
-        <div class="verification-section"></div>
-      </div>
-
-      <ng-container *ngIf="errorMessage">
-        <div class="error-section text-danger fw-bold">{{ errorMessage }}</div>
-      </ng-container>
-
-      <div class="btns">
-        <button
-          type="submit"
-          class="btn btn-success"
-          [disabled]="userForm.invalid"
-        >
-          Sign in
-        </button>
-      </div>
-
-      <div
-        class="register-btn text-primary fw-bold"
-        (click)="navigateToRegister()"
-      >
-        Get Serp API Key
-
-        <i class="bi bi-link fs-5"></i>
-      </div>
-    </form>
-  </div>
+      <div class="loader-section"></div>
+    </div>
+  </ng-template>
 </div>

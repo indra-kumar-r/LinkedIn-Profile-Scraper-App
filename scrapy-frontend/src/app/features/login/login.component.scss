@@ -25,7 +25,6 @@
       letter-spacing: 4px;
       font-size: 64px;
       font-weight: bold;
-      font-family: "Poppins", sans-serif;
       background: linear-gradient(90deg, #ff7a1a, #ff6a00, #ff7a1a);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -188,5 +187,47 @@
         }
       }
     }
+  }
+}
+
+.loader-wrapper {
+  flex-direction: column;
+  gap: 12px;
+
+  .logo-section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #ff7a1a, #ff6a00, #ff7a1a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 5px;
+
+    img {
+      width: 5%;
+    }
+  }
+
+  .loader-section {
+    height: 4px;
+    width: 200px;
+    background: no-repeat linear-gradient(#ff7a1a 0 0),
+      no-repeat linear-gradient(#ff7a1a 0 0), #ff6a003b;
+    background-size: 60% 100%;
+    animation: loader 2s infinite;
+  }
+}
+
+@keyframes loader {
+  0% {
+    background-position: -150% 0, -150% 0;
+  }
+  66% {
+    background-position: 250% 0, -150% 0;
+  }
+  100% {
+    background-position: 250% 0, 250% 0;
   }
 }
