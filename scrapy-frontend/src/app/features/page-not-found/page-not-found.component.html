@@ -1,1 +1,21 @@
-<p>page-not-found works!</p>
+<div class="page-not-found-wrapper">
+  <div class="logo-container" (click)="navigateToSearch()">
+    <img src="logo.png" alt="Logo" />
+
+    <div class="logo-text fs-3 fw-bolder text-secondary text-uppercase">
+      Scrapy
+    </div>
+  </div>
+
+  <div class="page-not-found-container">
+    <img src="page_not_found.png" alt="Page not found" />
+
+    <div class="btns">
+      <button class="btn btn-dark" (click)="navigateToSearch()">
+        New search
+      </button>
+
+      <button class="btn btn-dark" (click)="navigateToBack()">Go back</button>
+    </div>
+  </div>
+</div>
