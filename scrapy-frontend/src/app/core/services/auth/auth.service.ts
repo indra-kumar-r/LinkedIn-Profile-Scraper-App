@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { StorageService } from '../storage/storage.service';
 import { Auth } from '../../../models/shared.model';
+import { BrowserStorageService } from '../browser-storage/browser-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,26 +11,29 @@ export class AuthService {
   private userInfoSubject = new BehaviorSubject<Auth | null>(null);
   userInfo$ = this.userInfoSubject.asObservable();
 
-  constructor(private router: Router, private storageService: StorageService) {
-    const auth = this.storageService.auth;
+  constructor(
+    private router: Router,
+    private browserStorageService: BrowserStorageService
+  ) {
+    const auth = this.browserStorageService.auth;
     if (auth) {
       this.userInfoSubject.next(auth);
     }
   }
 
   login(auth: Auth): void {
-    this.storageService.auth = auth;
+    this.browserStorageService.auth = auth;
     this.userInfoSubject.next(auth);
   }
 
   logout() {
-    this.storageService.clearStorageData();
+    this.browserStorageService.clearStorageData();
     this.userInfoSubject.next(null);
     this.router.navigate(['/login']);
   }
 
   restoreUserInfo() {
-    const userInfo = this.storageService.auth;
+    const userInfo = this.browserStorageService.auth;
     if (userInfo) {
       this.userInfoSubject.next(userInfo);
     } else {
@@ -43,7 +46,7 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    const auth = this.storageService.auth;
+    const auth = this.browserStorageService.auth;
     return !!auth && !!auth.userId;
   }
 }
