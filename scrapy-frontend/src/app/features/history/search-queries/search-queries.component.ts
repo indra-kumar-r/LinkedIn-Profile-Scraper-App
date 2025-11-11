@@ -23,7 +23,6 @@ export class SearchQueriesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   userId!: string;
-  user!: User;
 
   loadingSearchQueries = false;
   page = 1;
