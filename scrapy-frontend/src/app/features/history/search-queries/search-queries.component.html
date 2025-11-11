@@ -67,9 +67,15 @@
 
       <ng-template #emptyResultsContainer>
         <div class="empty-results-section">
+          <img src="empty_results.png" alt="Logo" />
+
           <div class="info text-secondary fw-bold text-uppercase">
             No search queries found!
           </div>
+
+          <button class="btn btn-dark" (click)="navigateToSearch()">
+            New search
+          </button>
         </div>
       </ng-template>
     </ng-container>

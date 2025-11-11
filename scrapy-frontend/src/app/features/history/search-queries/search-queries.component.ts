@@ -84,4 +84,8 @@ export class SearchQueriesComponent implements OnInit, OnDestroy {
     navigator.clipboard.writeText(searchQuery);
     this.toasterService.toast('Search query copied to clipboard');
   }
+
+  navigateToSearch(): void {
+    this.router.navigate(['/search']);
+  }
 }
