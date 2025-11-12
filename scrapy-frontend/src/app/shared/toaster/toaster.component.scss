@@ -1,4 +1,4 @@
-.toaster-container {
+.toaster-wrapper {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -7,21 +7,23 @@
   gap: 8px;
   z-index: 25;
 
-  .toast {
+  .toaster {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 8px;
+    gap: 24px;
     background: black;
     color: white;
     padding: 12px 24px;
-    border-radius: 24px;
+    border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    min-width: 250px;
+    min-width: 200px;
+    max-width: 350px;
 
-    .toast-text {
+    .toast-message {
       width: 100%;
       color: white;
+      font-size: 12px;
     }
   }
 

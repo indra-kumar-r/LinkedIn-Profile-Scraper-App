@@ -122,7 +122,6 @@
     border-radius: 12px;
     margin-left: 24px;
     box-shadow: 0 0 12px 8px #62668c14;
-    cursor: pointer;
     transition: all 0.3s ease-in-out;
 
     &:hover {
@@ -209,7 +208,7 @@
     height: 4px;
     width: 200px;
     background: no-repeat linear-gradient(black 0 0),
-      no-repeat linear-gradient(#414141 0 0), black;
+      no-repeat linear-gradient(#cecece 0 0), #858585;
     background-size: 60% 100%;
     animation: loader 2s infinite;
   }
