@@ -3,5 +3,120 @@
     <app-sidebar></app-sidebar>
   </div>
 
-  <div class="search-container"></div>
+  <div
+    class="search-container"
+    [ngClass]="{
+      default: !(searchResults.length > 0)
+    }"
+  >
+    <ng-container *ngIf="!searching; else searchingContainer">
+      <div class="search-section">
+        <ng-container *ngIf="!(searchResults.length > 0)">
+          <div class="image-section">
+            <img src="logo.png" alt="Search" />
+          </div>
+
+          <div class="fs-2">
+            Search <span class="fw-bold"> Linkedin profiles </span> using
+            <span class="fw-bold"> boolean search! </span>
+          </div>
+        </ng-container>
+
+        <ng-container
+          *ngIf="!(searchResults.length > 0); else disabledSearchContainer"
+        >
+          <form (ngSubmit)="search()">
+            <input type="text" placeholder="Enter the boolean search" />
+
+            <div class="search-icon-section fw-bold" (click)="search()">
+              Search <i class="bi bi-search fw-bold fs-6"></i>
+            </div>
+          </form>
+        </ng-container>
+
+        <ng-template #disabledSearchContainer>
+          <div class="read-only-section text-dark">
+            <span>
+              {{ query }} Lorem ipsum dolor sit amet consectetur adipisicing
+              elit. Adipisci nam reprehenderit nostrum dolor vero odit, a
+              perspiciatis, quod ipsum minus neque veniam minima fugiat. Quod,
+              veniam tempora? Repellendus, ipsa illum?
+            </span>
+
+            <div class="copy-btn" (click)="copySearchQuery()">
+              <i class="bi bi-copy fs-5"></i>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-container *ngIf="!(searchResults.length > 0)">
+          <div class="helper-section" (click)="linkedinHelper()">
+            <div class="text-dark fw-bold">
+              Check out how to use boolean search on
+            </div>
+
+            <div class="text-primary">
+              <i class="bi bi-linkedin"></i>
+              <span class="fw-bold"> Linkedin </span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="searchResults.length > 0 && !searching">
+      <div class="search-results-section">
+        <div class="export-section">
+          <button class="btn btn-dark" (click)="exportToExcel()">Export</button>
+        </div>
+
+        <div class="results-section">
+          <div class="search-item" *ngFor="let item of this.searchResults">
+            <div class="title-section">
+              <span class="text-dark fw-bold fs-5">{{ item.title }}</span>
+
+              <div class="item-btns text-dark fw-bold">
+                <div class="item-btn" (click)="viewLinkedinProfile(item.link)">
+                  View Profile <i class="bi bi-link fs-5"></i>
+                </div>
+
+                <div class="item-btn" (click)="copyLinkedinUrl(item.link)">
+                  Copy Link
+                  <i class="bi bi-copy fs-6"></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="link-section text-primary">
+              <i class="bi bi-linkedin"></i> {{ item.link }}
+            </div>
+
+            <div class="snippet-section">{{ item.snippet }}</div>
+          </div>
+        </div>
+
+        <ng-container *ngIf="page <= 10; else limitInfoContainer">
+          <div class="options-section">
+            <button class="btn btn-dark" (click)="search()">Load more</button>
+          </div>
+        </ng-container>
+
+        <ng-template #limitInfoContainer>
+          <div class="limit-info text-secondary fw-bold">
+            You have reached the limit of 100 results!
+          </div>
+        </ng-template>
+      </div>
+    </ng-container>
+  </div>
 </div>
+
+<ng-template #searchingContainer>
+  <div class="loader-wrapper">
+    <div class="logo-section">
+      <img src="logo.png" alt="Logo" />
+    </div>
+
+    <div class="loader-section"></div>
+  </div>
+</ng-template>

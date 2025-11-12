@@ -26,11 +26,8 @@
               (click)="viewSearchResults(query.searchId)"
             >
               <div class="query-content-section">
-                <div class="query-content">
-                  <span>Search:</span>
-                  <span class="fw-bold text-dark">
-                    {{ query.query }}
-                  </span>
+                <div class="query-content fw-bold text-dark">
+                  {{ query.query }}
                 </div>
 
                 <div
@@ -43,19 +40,9 @@
                 </div>
               </div>
 
-              <div class="query-content-section query-detail-section">
-                <div class="query-content">
-                  <span>Search count:</span>
-                  <span class="fw-bold text-dark">
-                    {{ query.searchCount }}
-                  </span>
-                </div>
-
-                <div class="query-content">
-                  <span>Searched on:</span>
-                  <span class="fw-bold text-dark">
-                    {{ query.createdAt | date }}
-                  </span>
+              <div class="query-content-section">
+                <div class="query-content fw-bold">
+                  {{ query.createdAt | date }}
                 </div>
               </div>
             </div>
