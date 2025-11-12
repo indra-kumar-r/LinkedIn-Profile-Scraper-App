@@ -125,7 +125,7 @@ export class SearchQueriesComponent implements OnInit, OnDestroy {
 
   copySearchQuery(searchQuery: string): void {
     navigator.clipboard.writeText(searchQuery);
-    this.toasterService.toast('Search query copied to clipboard');
+    this.toasterService.toast('Copied search query');
   }
 
   navigateToSearch(): void {

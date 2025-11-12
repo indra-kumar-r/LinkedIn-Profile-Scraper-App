@@ -78,12 +78,12 @@ export class SearchQueryComponent implements OnInit, OnDestroy {
 
   copySearchQuery(): void {
     navigator.clipboard.writeText(this.searchQuery?.query);
-    this.toasterService.toast('Search query copied to clipboard');
+    this.toasterService.toast('Copied search query');
   }
 
   copyLinkedinUrl(url: string): void {
     navigator.clipboard.writeText(url);
-    this.toasterService.toast('Linkedin url copied to clipboard');
+    this.toasterService.toast('Copied Linkedin url');
   }
 
   viewLinkedinProfile(url: string): void {

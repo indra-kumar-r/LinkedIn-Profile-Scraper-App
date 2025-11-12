@@ -1,6 +1,6 @@
-<div class="toaster-container">
-  <div *ngFor="let toast of toasts" class="toast" @fadeIn>
-    <div class="toast-text fw-bold">{{ toast?.message }}</div>
+<div class="toaster-wrapper">
+  <div *ngFor="let toast of toasts" class="toaster" @fadeIn>
+    <div class="toast-message fw-bold">{{ toast?.message }}</div>
 
     <div class="toast-dismiss" (click)="dismiss(toast.id)">✕</div>
   </div>
