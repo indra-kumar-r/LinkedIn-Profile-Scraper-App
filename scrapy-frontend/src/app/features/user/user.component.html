@@ -5,57 +5,69 @@
 
   <div class="user-container">
     <ng-container *ngIf="!loadingUser; else loaderContainer">
-      <div class="basic-details-section">
-        <div class="user-name fs-1 fw-bold text-dark">
-          {{ user.name | titlecase }}
+      <ng-container *ngIf="user.id; else emptyUserContainer">
+        <div class="basic-details-section">
+          <div class="user-name fs-1 fw-bold text-dark">
+            {{ user.name | titlecase }}
+          </div>
+
+          <div class="user-email fs-5 fw-bold text-dark">
+            {{ user.email }}
+          </div>
         </div>
 
-        <div class="user-email fs-5 fw-bold text-dark">
-          {{ user.email }}
-        </div>
-      </div>
+        <div class="serpapi-details-section">
+          <div class="content-section">
+            Account Id:
+            <span class="fw-bold text-dark">{{ user.accountId }}</span>
+          </div>
 
-      <div class="serpapi-details-section">
-        <div class="content-section">
-          Account Id:
-          <span class="fw-bold text-dark">{{ user.accountId }}</span>
+          <div class="content-section">
+            Plan: <span class="fw-bold text-dark">{{ user.planName }}</span>
+          </div>
+
+          <div class="content-section">
+            Account Status:
+            <span class="fw-bold text-dark">{{ user.accountStatus }}</span>
+          </div>
+
+          <div class="content-section">
+            This Month Usage:
+            <span class="fw-bold text-dark">{{ user.thisMonthUsage }}</span>
+          </div>
+
+          <div class="content-section">
+            Total Searches Left:
+            <span class="fw-bold text-dark"
+              >{{ user.totalSearchesLeft }} / {{ user.searchesPerMonth }}</span
+            >
+          </div>
+
+          <div class="content-section">
+            Created on:
+            <span class="fw-bold text-dark">{{ user.createdAt | date }}</span>
+          </div>
+
+          <div class="content-section">
+            Last Updated on:
+            <span class="fw-bold text-dark">{{ user.updatedAt | date }}</span>
+          </div>
         </div>
 
-        <div class="content-section">
-          Plan: <span class="fw-bold text-dark">{{ user.planName }}</span>
+        <div class="options-section">
+          <div class="btn btn-dark" (click)="refreshUser()">Refresh</div>
         </div>
+      </ng-container>
 
-        <div class="content-section">
-          Account Status:
-          <span class="fw-bold text-dark">{{ user.accountStatus }}</span>
+      <ng-template #emptyUserContainer>
+        <div class="empty-user-section">
+          <img src="logo.png" alt="Logo" />
+
+          <div class="info text-secondary fw-bold fs-6 text-uppercase">
+            No user found!
+          </div>
         </div>
-
-        <div class="content-section">
-          This Month Usage:
-          <span class="fw-bold text-dark">{{ user.thisMonthUsage }}</span>
-        </div>
-
-        <div class="content-section">
-          Total Searches Left:
-          <span class="fw-bold text-dark"
-            >{{ user.totalSearchesLeft }} / {{ user.searchesPerMonth }}</span
-          >
-        </div>
-
-        <div class="content-section">
-          Created on:
-          <span class="fw-bold text-dark">{{ user.createdAt | date }}</span>
-        </div>
-
-        <div class="content-section">
-          Last Updated on:
-          <span class="fw-bold text-dark">{{ user.updatedAt | date }}</span>
-        </div>
-      </div>
-
-      <div class="options-section">
-        <div class="btn btn-dark" (click)="refreshUser()">Refresh</div>
-      </div>
+      </ng-template>
     </ng-container>
 
     <ng-template #loaderContainer>
