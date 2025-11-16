@@ -30,13 +30,19 @@
                   {{ query.query }}
                 </div>
 
-                <div
-                  class="copy-btn"
-                  (click)="
-                    $event.stopPropagation(); copySearchQuery(query.query)
-                  "
-                >
-                  <i class="bi bi-copy fs-5"></i>
+                <div class="options-section">
+                  <div class="option-btn">
+                    <i class="bi bi-arrow-right-circle fs-5"></i>
+                  </div>
+
+                  <div
+                    class="option-btn"
+                    (click)="
+                      $event.stopPropagation(); copySearchQuery(query.query)
+                    "
+                  >
+                    <i class="bi bi-copy fs-5"></i>
+                  </div>
                 </div>
               </div>
 
