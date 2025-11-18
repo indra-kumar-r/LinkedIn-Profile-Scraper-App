@@ -66,7 +66,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     if (!this.query || this.query.trim().length === 0) {
-      this.toasterService.toast('Please enter a search query');
       return;
     }
 
@@ -128,6 +127,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       .getSearchResults(this.searchId)
       .pipe(
         tap((res: SearchResultsResponse) => {
+          this.query = res?.results.query ?? '';
           this.searchResults = res?.results?.organicResults ?? [];
 
           const resultsCount =
@@ -136,7 +136,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         }),
         catchError((err) => {
           console.error('Error: ', err);
-          this.router.navigate(['/history']);
+          this.router.navigate(['/search']);
           this.toasterService.toast('Error fetching user search queries');
           return of([]);
         }),

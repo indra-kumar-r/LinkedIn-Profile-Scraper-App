@@ -3,12 +3,7 @@
     <app-sidebar></app-sidebar>
   </div>
 
-  <div
-    class="search-container"
-    [ngClass]="{
-      default: !searchId
-    }"
-  >
+  <div class="search-container">
     <ng-container *ngIf="!searchId; else searchContainer">
       <div class="search-section">
         <div class="image-section">
@@ -53,17 +48,10 @@
 
     <ng-template #searchContainer>
       <div class="search-section">
-        <div class="read-only-section text-dark">
-          <span>
-            {{ query }} Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Adipisci nam reprehenderit nostrum dolor vero odit, a perspiciatis,
-            quod ipsum minus neque veniam minima fugiat. Quod, veniam tempora?
-            Repellendus, ipsa illum?
-          </span>
+        <div class="query-section text-secondary" (click)="copySearchQuery()">
+          {{ query }}
 
-          <div class="copy-btn" (click)="copySearchQuery()">
-            <i class="bi bi-copy fs-5"></i>
-          </div>
+          <i class="bi bi-copy fs-5"></i>
         </div>
 
         <div class="search-results-section">
@@ -75,7 +63,12 @@
             </div>
           </ng-container>
 
-          <div class="results-section">
+          <div
+            class="results-section"
+            [ngClass]="{
+              loading: loading
+            }"
+          >
             <div class="search-item" *ngFor="let item of this.searchResults">
               <div class="title-section">
                 <span class="text-dark fw-bold fs-5">{{ item.title }}</span>
@@ -116,7 +109,7 @@
           </ng-container>
 
           <ng-template #limitInfoContainer>
-            <div class="limit-info text-secondary fw-bold">
+            <div class="text-secondary fw-bold">
               You have reached the limit of 100 results!
             </div>
           </ng-template>
