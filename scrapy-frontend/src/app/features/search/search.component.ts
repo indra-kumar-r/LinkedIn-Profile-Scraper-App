@@ -12,24 +12,29 @@ import {
   SearchResponse,
 } from '../../models/search.model';
 import { SearchResultsResponse } from '../../models/storage.model';
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { exportToExcel } from '../../core/utils/excel.util';
 
 @Component({
   selector: 'app-search',
-  imports: [CommonModule, SidebarComponent, FormsModule],
+  imports: [CommonModule, SidebarComponent, ReactiveFormsModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  searchForm!: FormGroup;
+
   userId!: string;
-  searchId!: string;
+  searchId!: string | null;
 
-  query: string = '';
-  page: number = 0;
-
+  page = 0;
   loading = false;
 
   searchResults: OrganicResult[] = [];
@@ -41,10 +46,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     private browserStorageService: BrowserStorageService,
     private router: Router,
     private route: ActivatedRoute,
-    private location: Location
+    private location: Location,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.initForm();
+
     this.userId = this.browserStorageService?.auth?.userId!;
     this.route.params
       .pipe(takeUntil(this.destroy$))
@@ -53,7 +61,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         if (this.searchId && this.searchId !== 'new-search') {
           this.fetchSearchResults();
         } else {
-          this.router.navigate(['/search']);
+          this.searchForm.reset();
         }
       });
   }
@@ -63,25 +71,34 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  initForm(): void {
+    this.searchForm = this.formBuilder.group({
+      query: [null, [Validators.required, Validators.minLength(1)]],
+    });
+  }
+
   onSubmit(): void {
-    if (!this.query || this.query.trim().length === 0) {
-      return;
-    }
+    const query = (this.searchForm.get('query')?.value || '').toString().trim();
+    if (!query) return;
 
     this.page = 0;
     this.searchResults = [];
     this.searchId = 'new-search';
 
     this.location.replaceState(`/search/${this.searchId}`);
+
     this.search();
   }
 
   search(): void {
+    const query = (this.searchForm.get('query')?.value || '').toString().trim();
+    if (!query) return;
+
     this.loading = true;
 
     const payload: SearchRequest = {
       user_id: this.userId,
-      query: this.query || '',
+      query,
       page: this.page + 1,
     };
 
@@ -126,12 +143,14 @@ export class SearchComponent implements OnInit, OnDestroy {
       .getSearchResults(this.searchId)
       .pipe(
         tap((res: SearchResultsResponse) => {
-          this.query = res?.results.query ?? '';
+          this.searchForm.patchValue({ query: res?.results.query ?? '' });
+
           this.searchResults = res?.results?.organicResults ?? [];
 
           const resultsCount =
             res?.results?.organicResultsCount ?? this.searchResults.length;
-          this.page = Math.floor(resultsCount / 10);
+
+          this.page = resultsCount > 0 ? Math.ceil(resultsCount / 10) : 0;
         }),
         catchError((err) => {
           console.error('Error: ', err);
@@ -148,7 +167,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   copySearchQuery(): void {
-    navigator.clipboard.writeText(this.query);
+    const query = (this.searchForm.get('query')?.value || '').toString();
+    navigator.clipboard.writeText(query);
     this.toasterService.toast('Copied search query');
   }
 

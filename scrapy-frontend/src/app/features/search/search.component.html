@@ -15,17 +15,24 @@
           <span class="fw-bold"> boolean search! </span>
         </div>
 
-        <form (ngSubmit)="onSubmit()">
+        <form
+          [formGroup]="searchForm"
+          (ngSubmit)="onSubmit()"
+          class="input-form"
+        >
           <input
-            name="query"
-            [(ngModel)]="query"
+            formControlName="query"
             placeholder="Enter the boolean search"
             autocomplete="off"
             required
           />
 
           <div class="form-options">
-            <button type="submit " class="btn btn-dark" [disabled]="!query">
+            <button
+              type="submit"
+              class="btn btn-dark"
+              [disabled]="searchForm.invalid"
+            >
               <i class="bi bi-search fw-bold fs-6"></i>
             </button>
           </div>
@@ -49,7 +56,7 @@
     <ng-template #searchContainer>
       <div class="search-section">
         <div class="query-section text-secondary" (click)="copySearchQuery()">
-          {{ query }}
+          {{ searchForm.get("query")?.value }}
 
           <i class="bi bi-copy fs-5"></i>
         </div>
