@@ -20,19 +20,20 @@
           <span class="fw-bold"> boolean search! </span>
         </div>
 
-        <form (ngSubmit)="onSubmit()" class="input-section">
-          <textarea
+        <form (ngSubmit)="onSubmit()">
+          <input
             name="query"
             [(ngModel)]="query"
-            rows="5"
             placeholder="Enter the boolean search"
-            (keydown.enter)="$event.preventDefault(); onSubmit()"
+            autocomplete="off"
             required
-          ></textarea>
+          />
 
-          <button type="submit" class="search-icon-section fw-bold">
-            Search <i class="bi bi-search fw-bold fs-6"></i>
-          </button>
+          <div class="form-options">
+            <button type="submit " class="btn btn-dark" [disabled]="!query">
+              <i class="bi bi-search fw-bold fs-6"></i>
+            </button>
+          </div>
         </form>
 
         <div class="helper-section" (click)="linkedinHelper()">
@@ -44,6 +45,8 @@
             <i class="bi bi-linkedin"></i>
             <span class="fw-bold"> Linkedin </span>
           </div>
+
+          <i class="bi bi-arrow-up-right-circle fs-6 fw-bold"></i>
         </div>
       </div>
     </ng-container>
