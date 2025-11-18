@@ -57,9 +57,7 @@
         <div class="search-results-section">
           <ng-container *ngIf="searchResults.length > 0 && !loading">
             <div class="export-section">
-              <button class="btn btn-dark" (click)="exportToExcel()">
-                Export
-              </button>
+              <button class="btn btn-dark" (click)="export()">Export</button>
             </div>
           </ng-container>
 
