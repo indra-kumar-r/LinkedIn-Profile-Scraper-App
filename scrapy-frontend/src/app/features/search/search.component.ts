@@ -14,10 +14,11 @@ import {
 import { SearchResultsResponse } from '../../models/storage.model';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-search',
-  imports: [CommonModule, SidebarComponent],
+  imports: [CommonModule, SidebarComponent, FormsModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
 })
@@ -30,7 +31,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   query: string = '';
   page: number = 0;
 
-  searching = false;
+  loading = false;
 
   searchResults: OrganicResult[] = [];
 
@@ -49,8 +50,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.route.params
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ searchId }) => {
-        this.searchId = searchId;
-        if (searchId) this.fetchSearchResults();
+        this.searchId = searchId ?? null;
+        if (this.searchId && this.searchId !== 'new-search') {
+          this.fetchSearchResults();
+        } else {
+          this.router.navigate(['/search']);
+        }
       });
   }
 
@@ -59,17 +64,32 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  onSubmit(): void {
+    if (!this.query || this.query.trim().length === 0) {
+      this.toasterService.toast('Please enter a search query');
+      return;
+    }
+
+    this.page = 0;
+    this.searchResults = [];
+    this.searchId = 'new-search';
+
+    this.location.replaceState(`/search/${this.searchId}`);
+    this.search();
+  }
+
   search(): void {
-    this.searching = true;
+    this.loading = true;
 
     const payload: SearchRequest = {
       user_id: this.userId,
-      query:
-        'site:linkedin.com/in ("Software Developer") ("Python" AND "React") ("3 years" OR "4 years" OR "5 years") ("Healthcare" OR "Healthtech" OR "US Healthcare") ("Pune" OR "Bangalore" OR "India")',
+      query: this.query || '',
       page: this.page + 1,
     };
 
-    if (this.searchId) payload.search_id = this.searchId;
+    if (this.searchId && this.searchId !== 'new-search') {
+      payload.search_id = this.searchId;
+    }
 
     this.searchService
       .search(payload)
@@ -82,6 +102,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
           this.page += 1;
 
+          this.searchId = res.searchId;
           this.location.replaceState(`/search/${res.searchId}`);
         }),
         catchError((err) => {
@@ -91,7 +112,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           return of([]);
         }),
         finalize(() => {
-          this.searching = false;
+          this.loading = false;
         }),
         takeUntil(this.destroy$)
       )
@@ -99,14 +120,19 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   fetchSearchResults(): void {
-    this.searching = true;
+    if (!this.searchId) return;
+
+    this.loading = true;
 
     this.storageService
       .getSearchResults(this.searchId)
       .pipe(
         tap((res: SearchResultsResponse) => {
           this.searchResults = res?.results?.organicResults ?? [];
-          this.page = res.results.organicResultsCount / 10;
+
+          const resultsCount =
+            res?.results?.organicResultsCount ?? this.searchResults.length;
+          this.page = Math.floor(resultsCount / 10);
         }),
         catchError((err) => {
           console.error('Error: ', err);
@@ -115,7 +141,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           return of([]);
         }),
         finalize(() => {
-          this.searching = false;
+          this.loading = false;
         }),
         takeUntil(this.destroy$)
       )
