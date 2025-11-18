@@ -21,7 +21,7 @@
     align-items: flex-start;
     justify-content: flex-start;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
     padding: 24px 48px;
     border-radius: 8px;
     box-shadow: 0 0 12px 8px rgba(211, 211, 211, 0.3);
@@ -45,6 +45,7 @@
       align-items: flex-start;
       justify-content: flex-start;
       flex-direction: column;
+      gap: 16px;
       overflow: hidden;
 
       .search-queries-headers-section {
@@ -61,7 +62,7 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
         gap: 24px;
-        padding: 42px;
+        padding: 12px 42px;
         overflow: auto;
 
         .search-query {

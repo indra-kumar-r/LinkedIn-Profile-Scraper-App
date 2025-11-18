@@ -11,12 +11,8 @@
     <ng-container *ngIf="!loadingSearchQueries; else loaderContainer">
       <ng-container *ngIf="totalResults > 0; else emptyResultsContainer">
         <div class="search-queries-section">
-          <div class="search-queries-headers-section text-secondary fw-bold">
-            <span class="fs-6 text-dark">
-              {{ totalResults }}
-            </span>
-
-            search queries
+          <div class="search-queries-headers-section fw-bold fs-6 text-dark">
+            {{ totalResults }} results
           </div>
 
           <div class="search-queries-details-section">
@@ -46,9 +42,13 @@
                 </div>
               </div>
 
-              <div class="query-content-section">
-                <div class="query-content fw-bold">
+              <div class="query-content-section fw-bold">
+                <div class="query-contentx">
                   {{ query.createdAt | date }}
+                </div>
+
+                <div class="query-content">
+                  Search count: {{ query.searchCount }}
                 </div>
               </div>
             </div>
