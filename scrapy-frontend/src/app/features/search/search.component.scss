@@ -212,6 +212,7 @@
         }
 
         .options-section {
+          position: relative;
           width: 100%;
           display: flex;
           align-items: center;
@@ -219,6 +220,11 @@
 
           button {
             font-size: 14px;
+          }
+
+          .info-section {
+            position: absolute;
+            left: 7.5%;
           }
         }
 

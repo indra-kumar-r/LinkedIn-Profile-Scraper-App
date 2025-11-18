@@ -96,7 +96,7 @@
             </div>
           </div>
 
-          <ng-container *ngIf="page <= 10; else limitInfoContainer">
+          <ng-container *ngIf="page < 10; else limitInfoContainer">
             <div class="options-section">
               <button
                 class="btn btn-dark"
@@ -105,6 +105,12 @@
               >
                 Load more
               </button>
+
+              <ng-container *ngIf="!loading">
+                <div class="info-section text-dark fw-bold">
+                  Total results: {{ searchResults.length }}
+                </div>
+              </ng-container>
             </div>
           </ng-container>
 
