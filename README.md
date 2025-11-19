@@ -1,4 +1,4 @@
-# 🦊 Scrapy — LinkedIn Profile Scraper App
+# LinkedIn Profile Scraper App
 
 > A **microservices-based** LinkedIn profile scraping system built to help **recruiters** eliminate the manual effort of boolean searching and data collection.
 
@@ -6,15 +6,15 @@
 
 ## 🌟 Project Story
 
-Recruiters spend hours manually running boolean searches on LinkedIn to find profiles that match a job description — then copy-pasting results into Excel.
+Recruiters spend hours manually running Boolean searches on LinkedIn to find profiles that match a job description — then copy-pasting results into Excel.
 
 I wanted to automate that.
 
 So I built **Scrapy**, a full-stack web app that:
 
--   lets recruiters **run complex boolean searches** using keywords (like “React Developer in Bangalore”),
+-   let recruiters **run complex boolean searches** using keywords (like “React Developer in Bangalore”),
 -   automatically **fetches results using SerpAPI**,
--   and stores, organizes, and displays them beautifully — searchable, filterable, and exportable.
+-   and stores, organises, and displays them beautifully — searchable, filterable, and exportable.
 
 The goal: **reduce hours of sourcing into minutes**.
 
@@ -75,7 +75,7 @@ This project follows a **microservices architecture** — each service is modula
 1. **User logs in** via the frontend.
 2. User enters a boolean query → **search-service** triggers a SerpAPI call.
 3. Results are stored via **storage-service** into MongoDB.
-4. User can later view past results grouped by search ID via **history**.
+4. The user can later view past results grouped by search ID via **history**.
 5. Admin can view or update **user details** from **user-service**.
 
 ---
