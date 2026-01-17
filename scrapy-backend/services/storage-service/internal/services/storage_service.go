@@ -28,3 +28,7 @@ func (s *StorageService) GetSearchResults(ctx context.Context, searchID string) 
 func (s *StorageService) GetUserSearchResults(ctx context.Context, userID string, page int, pageSize int) (int, []models.UserSearchResults, error) {
 	return s.StorageRepo.GetUserSearchResults(ctx, userID, page, pageSize)
 }
+
+func (s *StorageService) DeleteSearchResults(ctx context.Context, searchID string) error {
+	return s.StorageRepo.DeleteSearchResults(ctx, searchID)
+}

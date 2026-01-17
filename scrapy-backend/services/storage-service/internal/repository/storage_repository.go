@@ -21,6 +21,7 @@ const (
 )
 
 type StorageRepository struct {
+	Client     *mongo.Client
 	Collection *mongo.Collection
 }
 
@@ -43,6 +44,7 @@ func NewStorageRepository(db *mongo.Database) (*StorageRepository, error) {
 	}
 
 	return &StorageRepository{
+		Client:     db.Client(),
 		Collection: storageCollection,
 	}, nil
 }
@@ -243,4 +245,34 @@ func (r *StorageRepository) getGroupedSearches(parentCtx context.Context, userID
 	}
 
 	return results, nil
+}
+
+func (r *StorageRepository) DeleteSearchResults(ctx context.Context, searchID string) error {
+	session, err := r.Client.StartSession()
+	if err != nil {
+		return fmt.Errorf("start session: %w", err)
+	}
+	defer session.EndSession(ctx)
+
+	callback := func(sessCtx mongo.SessionContext) (interface{}, error) {
+		filter := bson.M{"search_id": searchID}
+
+		res, err := r.Collection.DeleteMany(sessCtx, filter)
+		if err != nil {
+			return nil, fmt.Errorf("deleting search results failed: %w", err)
+		}
+
+		if res.DeletedCount == 0 {
+			return nil, fmt.Errorf("no documents found for search_id %s", searchID)
+		}
+
+		return nil, nil
+	}
+
+	_, err = session.WithTransaction(ctx, callback)
+	if err != nil {
+		return fmt.Errorf("transaction failed: %w", err)
+	}
+
+	return nil
 }

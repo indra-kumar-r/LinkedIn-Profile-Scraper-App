@@ -28,8 +28,10 @@ func main() {
 	storageService := services.NewStorageService(storageRepo)
 	storageHandler := handlers.NewStorageHandler(storageService)
 
-	app.Post("/api/v1/store", storageHandler.StoreSearchResults)
+	app.Post("/api/v1/search/results/store", storageHandler.StoreSearchResults)
 	app.Get("/api/v1/search/results/:search_id", storageHandler.GetSearchResults)
+	app.Delete("/api/v1/search/results/:search_id", storageHandler.DeleteSearchResults)
+
 	app.Get("/api/v1/user/results/:user_id", storageHandler.GetUserSearchResults)
 
 	if err := app.Listen(":" + cfg.Port); err != nil {

@@ -91,7 +91,7 @@ func (s *SearchService) storeResults(userID, query string, page int, searchID st
 	}
 
 	body, _ := json.Marshal(storePayload)
-	storeURL := fmt.Sprintf("%s/api/v1/store", s.StorageServiceURL)
+	storeURL := fmt.Sprintf("%s/api/v1/search/results/store", s.StorageServiceURL)
 
 	const maxAttempts = 3
 	backoff := time.Second

@@ -83,3 +83,23 @@ func (h *StorageHandler) GetUserSearchResults(c *fiber.Ctx) error {
 		"results": searchResults,
 	})
 }
+
+func (h *StorageHandler) DeleteSearchResults(c *fiber.Ctx) error {
+	searchID := c.Params("search_id")
+	if searchID == "" {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error": "search_id is required",
+		})
+	}
+
+	err := h.StorageService.DeleteSearchResults(context.Background(), searchID)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(fiber.Map{
+		"message": "search results deleted successfully",
+	})
+}
