@@ -91,6 +91,10 @@
             align-items: center;
             justify-content: space-between;
 
+            &.query {
+              font-size: 14px;
+            }
+
             .query-details {
               display: flex;
               align-items: center;
@@ -100,7 +104,7 @@
 
             .options-section {
               display: flex;
-              gap: 24px;
+              gap: 32px;
 
               .option-btn {
                 transition: all 0.3s ease-in-out;

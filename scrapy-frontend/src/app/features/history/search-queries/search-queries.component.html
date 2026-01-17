@@ -21,7 +21,7 @@
               *ngFor="let query of searchResults"
               (click)="viewSearchResults(query.searchId)"
             >
-              <div class="query-content-section fw-bold text-dark">
+              <div class="query-content-section query fw-bold text-dark">
                 {{ query.query }}
               </div>
 
@@ -44,20 +44,20 @@
                   <div
                     class="option-btn"
                     (click)="
-                      $event.stopPropagation();
-                      deleteSearchQuery(query.searchId)
+                      $event.stopPropagation(); copySearchQuery(query.query)
                     "
                   >
-                    <i class="bi bi-trash3 fs-5"></i>
+                    <i class="bi bi-copy fs-5"></i>
                   </div>
 
                   <div
                     class="option-btn"
                     (click)="
-                      $event.stopPropagation(); copySearchQuery(query.query)
+                      $event.stopPropagation();
+                      deleteSearchQuery(query.searchId)
                     "
                   >
-                    <i class="bi bi-copy fs-5"></i>
+                    <i class="bi bi-trash3 fs-5"></i>
                   </div>
                 </div>
               </div>

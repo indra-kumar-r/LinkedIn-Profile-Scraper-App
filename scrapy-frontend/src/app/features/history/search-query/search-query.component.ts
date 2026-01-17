@@ -33,7 +33,7 @@ export class SearchQueryComponent implements OnInit, OnDestroy {
     private browserStorageService: BrowserStorageService,
     private toasterService: ToasterService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -70,7 +70,7 @@ export class SearchQueryComponent implements OnInit, OnDestroy {
         finalize(() => {
           this.loadingSearchQuery = false;
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -80,13 +80,13 @@ export class SearchQueryComponent implements OnInit, OnDestroy {
     this.toasterService.toast('Copied search query');
   }
 
-  copyLinkedinUrl(url: string): void {
-    navigator.clipboard.writeText(url);
-    this.toasterService.toast('Copied Linkedin url');
+  viewDetails(url: string): void {
+    window.open(url, '_blank');
   }
 
-  viewLinkedinProfile(url: string): void {
-    window.open(url, '_blank');
+  copyUrl(url: string): void {
+    navigator.clipboard.writeText(url);
+    this.toasterService.toast('Copied Linkedin url');
   }
 
   navigateBack(): void {
