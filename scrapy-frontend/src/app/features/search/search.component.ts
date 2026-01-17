@@ -19,6 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { exportToExcel } from '../../core/utils/excel.util';
+import { SearchSessionService } from '../../core/services/search-session/search-session.service';
 
 @Component({
   selector: 'app-search',
@@ -28,6 +29,7 @@ import { exportToExcel } from '../../core/utils/excel.util';
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
+  private searchReset$ = new Subject<void>();
 
   searchForm!: FormGroup;
 
@@ -48,6 +50,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private location: Location,
     private formBuilder: FormBuilder,
+    private searchSession: SearchSessionService,
   ) {}
 
   ngOnInit(): void {
@@ -58,17 +61,27 @@ export class SearchComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(({ searchId }) => {
         this.searchId = searchId ?? null;
+
         if (this.searchId && this.searchId !== 'new-search') {
           this.fetchSearchResults();
         } else {
-          this.searchForm.reset();
+          this.resetState();
         }
+      });
+
+    this.searchSession
+      .onNewSearch()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.resetState();
       });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.searchReset$.next();
+    this.searchReset$.complete();
   }
 
   initForm(): void {
@@ -115,6 +128,13 @@ export class SearchComponent implements OnInit, OnDestroy {
             ...(res?.results?.organicResults ?? []),
           ];
 
+          if (this.searchResults.length === 0) {
+            this.toasterService.toast('No results found for the search.');
+            this.searchSession.startNewSearch();
+            this.router.navigate(['search']);
+            return;
+          }
+
           this.page += 1;
 
           this.searchId = res.searchId;
@@ -129,7 +149,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         finalize(() => {
           this.loading = false;
         }),
-        takeUntil(this.destroy$),
+        takeUntil(this.searchReset$),
       )
       .subscribe();
   }
@@ -144,6 +164,13 @@ export class SearchComponent implements OnInit, OnDestroy {
       .pipe(
         tap((res: SearchResultsResponse) => {
           this.searchForm.patchValue({ query: res?.results.query ?? '' });
+
+          if (!res.results.query) {
+            this.toasterService.toast('No results found for the search.');
+            this.searchSession.startNewSearch();
+            this.router.navigate(['search']);
+            return;
+          }
 
           this.searchResults = res?.results?.organicResults ?? [];
 
@@ -161,7 +188,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         finalize(() => {
           this.loading = false;
         }),
-        takeUntil(this.destroy$),
+        takeUntil(this.searchReset$),
       )
       .subscribe();
   }
@@ -186,6 +213,17 @@ export class SearchComponent implements OnInit, OnDestroy {
       'https://www.linkedin.com/help/linkedin/answer/a524335',
       '_blank',
     );
+  }
+
+  private resetState(): void {
+    this.searchReset$.next();
+
+    this.loading = false;
+    this.page = 0;
+    this.searchId = null;
+    this.searchResults = [];
+
+    this.searchForm.reset();
   }
 
   export(): void {
