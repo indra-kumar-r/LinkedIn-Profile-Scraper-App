@@ -47,7 +47,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private location: Location,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
   ) {}
 
   ngOnInit(): void {
@@ -129,7 +129,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         finalize(() => {
           this.loading = false;
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -161,7 +161,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         finalize(() => {
           this.loading = false;
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
@@ -184,7 +184,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   linkedinHelper(): void {
     window.open(
       'https://www.linkedin.com/help/linkedin/answer/a524335',
-      '_blank'
+      '_blank',
     );
   }
 
