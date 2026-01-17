@@ -48,7 +48,7 @@ export class SearchQueriesComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private browserStorageService: BrowserStorageService,
     private router: Router,
-    private toasterService: ToasterService
+    private toasterService: ToasterService,
   ) {}
 
   ngOnInit(): void {
@@ -114,13 +114,33 @@ export class SearchQueriesComponent implements OnInit, OnDestroy {
         finalize(() => {
           this.loadingSearchQueries = false;
         }),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe();
   }
 
   viewSearchResults(searchId: string): void {
     this.router.navigate(['/history/search-queries', searchId]);
+  }
+
+  deleteSearchQuery(searchId: string): void {
+    this.loadingSearchQueries = true;
+
+    this.storageService
+      .deleteSearchResults(searchId)
+      .pipe(
+        tap(() => {
+          this.toasterService.toast('Deleted search results');
+          this.fetchUserSearchQueries();
+        }),
+        catchError((err) => {
+          console.error('Error: ', err);
+          this.toasterService.toast('Error deleting search results');
+          return of([]);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   copySearchQuery(searchQuery: string): void {

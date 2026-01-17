@@ -23,11 +23,16 @@ export class StorageService {
   }
 
   getUserSearchResults(
-    params: UserSearchResultsParams
+    params: UserSearchResultsParams,
   ): Observable<UserSearchResultsResponse> {
     const url = `${StorageApis.USER_SEARCH_RESULTS}/${encodeURIComponent(
-      params.userId
+      params.userId,
     )}?page=${params.page}&page_size=${params.pageSize}`;
     return this.http.get<UserSearchResultsResponse>(url, this.apiUrl);
+  }
+
+  deleteSearchResults(searchId: string): Observable<void> {
+    const url = `${StorageApis.SEARCH_RESULTS}/${encodeURIComponent(searchId)}`;
+    return this.http.delete<void>(url, this.apiUrl);
   }
 }

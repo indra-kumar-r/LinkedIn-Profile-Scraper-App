@@ -21,9 +21,19 @@
               *ngFor="let query of searchResults"
               (click)="viewSearchResults(query.searchId)"
             >
-              <div class="query-content-section header-content-section">
-                <div class="query-content fw-bold text-dark">
-                  {{ query.query }}
+              <div class="query-content-section fw-bold text-dark">
+                {{ query.query }}
+              </div>
+
+              <div class="query-content-section fw-bold">
+                <div class="query-details">
+                  <div class="query-contentx">
+                    {{ query.createdAt | date }}
+                  </div>
+
+                  <div class="query-content">
+                    Search count: {{ query.searchCount }}
+                  </div>
                 </div>
 
                 <div class="options-section">
@@ -34,21 +44,21 @@
                   <div
                     class="option-btn"
                     (click)="
+                      $event.stopPropagation();
+                      deleteSearchQuery(query.searchId)
+                    "
+                  >
+                    <i class="bi bi-trash3 fs-5"></i>
+                  </div>
+
+                  <div
+                    class="option-btn"
+                    (click)="
                       $event.stopPropagation(); copySearchQuery(query.query)
                     "
                   >
                     <i class="bi bi-copy fs-5"></i>
                   </div>
-                </div>
-              </div>
-
-              <div class="query-content-section fw-bold">
-                <div class="query-contentx">
-                  {{ query.createdAt | date }}
-                </div>
-
-                <div class="query-content">
-                  Search count: {{ query.searchCount }}
                 </div>
               </div>
             </div>
